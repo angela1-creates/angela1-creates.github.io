@@ -359,135 +359,187 @@
     <div class="mb-12 reveal">
       <span class="section-line mb-6"></span>
       <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Art</h2>
-      <p class="text-stone-500 font-light max-w-xl">A selection of work across mediums — digital painting, acrylic painting, watercolor, charcoal, ceramics, color pencil, and 3D.</p>
+      <p class="text-stone-500 font-light max-w-xl">A selection of work across mediums — acrylic painting, digital painting, watercolor, charcoal, ceramics, color pencil, and 3D. Scroll to explore all pieces.</p>
     </div>
 
-    <!-- Gallery grid — all pieces shown -->
-    <div class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 reveal" id="art-gallery">
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+    <!-- Gallery — horizontal scroll strip -->
+    <div class="relative reveal">
+      <!-- Scroll container -->
+      <div class="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 md:-mx-12 md:px-12 scroll-smooth"
+           id="art-scroll"
+           style="scrollbar-width: thin; scrollbar-color: #d6d3d1 transparent;">
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Building%20of%20Myself.jpg', 'Building of Myself — Digital Painting')">
-        <img src="assets/images/Building%20of%20Myself.jpg" alt="Building of Myself"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Building of Myself</p>
-            <p class="text-white/60 text-xs font-light">3D Experiment &amp; Color Pencil</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Building%20of%20Myself.jpg" alt="Building of Myself"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Building of Myself</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Digital Painting</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Contours%20of%20Becoming.jpg', 'Contours of Becoming — 3D Experiment &amp; Color Pencil')">
-        <img src="assets/images/Contours%20of%20Becoming.jpg" alt="Contours of Becoming"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Contours of Becoming</p>
-            <p class="text-white/60 text-xs font-light">Digital Painting</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Contours%20of%20Becoming.jpg" alt="Contours of Becoming"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Contours of Becoming</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">3D Experiment &amp; Color Pencil</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Exploration%20of%20Patterns.JPG', 'Exploration of Patterns — Ceramics')">
-        <img src="assets/images/Exploration%20of%20Patterns.JPG" alt="Exploration of Patterns"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Exploration of Patterns</p>
-            <p class="text-white/60 text-xs font-light">Digital Art</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Exploration%20of%20Patterns.JPG" alt="Exploration of Patterns"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Exploration of Patterns</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Ceramics</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/living%20in%20the%20music.jpg', 'Living in the Music — Acrylic Painting')">
-        <img src="assets/images/living%20in%20the%20music.jpg" alt="Living in the Music"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Living in the Music</p>
-            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/living%20in%20the%20music.jpg" alt="Living in the Music"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Living in the Music</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Never%20a%20chance.jpeg', 'Never a Chance — Charcoal')">
-        <img src="assets/images/Never%20a%20chance.jpeg" alt="Never a Chance"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Never a Chance</p>
-            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Never%20a%20chance.jpeg" alt="Never a Chance"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Never a Chance</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Charcoal</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Reflections%20of%20the%20Self.jpg', 'Reflections of the Self — Acrylic Painting')">
-        <img src="assets/images/Reflections%20of%20the%20Self.jpg" alt="Reflections of the Self"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Reflections of the Self</p>
-            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Reflections%20of%20the%20Self.jpg" alt="Reflections of the Self"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Reflections of the Self</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Smile.jpg', 'Smile — Acrylic Painting')">
-        <img src="assets/images/Smile.jpg" alt="Smile"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Smile</p>
-            <p class="text-white/60 text-xs font-light">Charcoal</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Smile.jpg" alt="Smile"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Smile</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/The%20Clock%20of%20Time%20.jpg', 'The Clock of Time — Acrylic Painting')">
-        <img src="assets/images/The%20Clock%20of%20Time%20.jpg" alt="The Clock of Time"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">The Clock of Time</p>
-            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/The%20Clock%20of%20Time%20.jpg" alt="The Clock of Time"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">The Clock of Time</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG', 'Visitors to the Empty Canvas — Digital Art')">
-        <img src="assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG" alt="Visitors to the Empty Canvas"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Visitors to the Empty Canvas</p>
-            <p class="text-white/60 text-xs font-light">Ceramics</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG" alt="Visitors to the Empty Canvas"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Visitors to the Empty Canvas</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Digital Art</p>
           </div>
         </div>
       </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
+      <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Bird.jpg', 'Bird — Watercolor')">
-        <img src="assets/images/Bird.jpg" alt="Bird"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Bird</p>
-            <p class="text-white/60 text-xs font-light">Watercolor</p>
+        <div class="h-80 bg-stone-100 overflow-hidden">
+          <img src="assets/images/Bird.jpg" alt="Bird"
+               loading="lazy"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               onerror="this.parentElement.parentElement.style.display='none'"/>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+          <div class="p-4 w-full">
+            <p class="text-white text-sm font-medium leading-tight">Bird</p>
+            <p class="text-white/60 text-xs font-light mt-0.5">Watercolor</p>
           </div>
         </div>
+      </div>
+      </div>
+
+      <!-- Scroll hint fade on right -->
+      <div class="pointer-events-none absolute right-0 top-0 bottom-4 w-16 bg-gradient-to-l from-stone-50 to-transparent hidden md:block"></div>
+    </div>
+
+    <!-- Scroll nav dots -->
+    <div class="flex items-center justify-between mt-5 reveal">
+      <p class="text-xs text-stone-400">
+        Scroll to see all 10 pieces &nbsp;·&nbsp; Click any piece to view full size
+      </p>
+      <div class="flex gap-2">
+        <button onclick="document.getElementById('art-scroll').scrollBy({left:-300,behavior:'smooth'})"
+                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all group">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button onclick="document.getElementById('art-scroll').scrollBy({left:300,behavior:'smooth'})"
+                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all group">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
-    <p class="text-xs text-stone-400 mt-6 reveal">
-      Images load from <code class="font-mono bg-stone-100 px-1 rounded">assets/images/</code>. Pieces not yet uploaded are automatically hidden.
-    </p>
   </div>
 </section>
 

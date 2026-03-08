@@ -4,40 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Angela Wan — Designer · Artist · Builder</title>
-  <meta name="description" content="Angela Wan — high school designer, artist, and builder from San Jose, CA. Visual storytelling, interaction design, and AI-assisted creativity." />
+  <meta name="description" content="Angela Wan — artist, designer, creative technologist, and builder from San Jose, CA. UX, HCI, AI-assisted creativity, and visual storytelling." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"DM Serif Display"', 'Georgia', 'serif'],
-            sans:  ['"DM Sans"', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            stone: {
-              50:  '#fafaf9', 100: '#f5f5f4', 200: '#e7e5e4',
-              300: '#d6d3d1', 400: '#a8a29e', 500: '#78716c',
-              600: '#57534e', 700: '#44403c', 800: '#292524', 900: '#1c1917',
-            },
-          },
-          animation: {
-            'fade-up':   'fadeUp .7s ease both',
-            'fade-in':   'fadeIn .6s ease both',
-            'line-grow': 'lineGrow .8s ease both',
-          },
-          keyframes: {
-            fadeUp:   { '0%': { opacity:'0', transform:'translateY(22px)' }, '100%': { opacity:'1', transform:'translateY(0)' } },
-            fadeIn:   { '0%': { opacity:'0' }, '100%': { opacity:'1' } },
-            lineGrow: { '0%': { transform:'scaleX(0)' }, '100%': { transform:'scaleX(1)' } },
-          },
-        },
-      },
-    }
-  </script>
 
   <style>
     /* ── Base ─────────────────────────────────────────────── */
@@ -103,6 +73,18 @@
     /* ── Mobile nav ───────────────────────────────────────── */
     #mobile-menu { transition: opacity .2s, transform .2s; }
   </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"DM Serif Display"', 'Georgia', 'serif'],
+            sans:  ['"DM Sans"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
 </head>
 
 <body class="bg-stone-50 text-stone-900">
@@ -172,12 +154,12 @@
 
       <!-- Tagline -->
       <p class="text-xl md:text-2xl font-light text-stone-500 tracking-wide mb-8 reveal reveal-delay-2">
-        Designer &nbsp;·&nbsp; Artist &nbsp;·&nbsp; Builder
+        Artist &nbsp;·&nbsp; Designer &nbsp;·&nbsp; Creative Technologist &nbsp;·&nbsp; Builder
       </p>
 
       <!-- Description -->
       <p class="text-base md:text-lg font-light text-stone-600 leading-relaxed max-w-2xl mb-10 reveal reveal-delay-3">
-        I enjoy exploring ideas through art, design, and technology. My interests range from visual storytelling and digital illustration to interaction design and AI-assisted prototyping. I'm especially curious about how creative tools and emerging technologies can help people express ideas, explore stories, and build meaningful experiences.
+        I explore the space where art, design, and technology meet. My work spans visual storytelling, interaction design, and AI-assisted prototyping — with a growing curiosity about product management, human-computer interaction, and game design. I'm especially interested in how creative tools and emerging technologies shape the way people experience, learn, and connect.
       </p>
 
       <!-- CTA row -->
@@ -377,142 +359,134 @@
     <div class="mb-12 reveal">
       <span class="section-line mb-6"></span>
       <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Art</h2>
-      <p class="text-stone-500 font-light max-w-xl">A selection of work across mediums — digital painting, oil painting, watercolor, color pencil, oil pastel, charcoal, and ceramics.</p>
+      <p class="text-stone-500 font-light max-w-xl">A selection of work across mediums — digital painting, acrylic painting, watercolor, charcoal, ceramics, color pencil, and 3D.</p>
     </div>
 
-    <!-- Gallery grid — no tabs, all pieces shown -->
+    <!-- Gallery grid — all pieces shown -->
     <div class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 reveal" id="art-gallery">
-      <!-- Images are loaded dynamically from assets/images/ -->
-      <!-- Placeholder cards shown until images are added -->
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/digital-1.jpg', 'Digital Painting')">
-        <img src="assets/images/digital-1.jpg" alt="Digital Painting"
+           onclick="openLightbox('assets/images/Building%20of%20Myself.jpg', 'Building of Myself — Digital Painting')">
+        <img src="assets/images/Building%20of%20Myself.jpg" alt="Building of Myself"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Digital Painting</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Building of Myself</p>
+            <p class="text-white/60 text-xs font-light">3D Experiment &amp; Color Pencil</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/digital-2.jpg', 'Digital Painting')">
-        <img src="assets/images/digital-2.jpg" alt="Digital Painting"
+           onclick="openLightbox('assets/images/Contours%20of%20Becoming.jpg', 'Contours of Becoming — 3D Experiment &amp; Color Pencil')">
+        <img src="assets/images/Contours%20of%20Becoming.jpg" alt="Contours of Becoming"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Digital Painting</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Contours of Becoming</p>
+            <p class="text-white/60 text-xs font-light">Digital Painting</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/digital-3.jpg', 'Digital Painting')">
-        <img src="assets/images/digital-3.jpg" alt="Digital Painting"
+           onclick="openLightbox('assets/images/Exploration%20of%20Patterns.JPG', 'Exploration of Patterns — Ceramics')">
+        <img src="assets/images/Exploration%20of%20Patterns.JPG" alt="Exploration of Patterns"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Digital Painting</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Exploration of Patterns</p>
+            <p class="text-white/60 text-xs font-light">Digital Art</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/digital-4.jpg', 'Digital Painting')">
-        <img src="assets/images/digital-4.jpg" alt="Digital Painting"
+           onclick="openLightbox('assets/images/living%20in%20the%20music.jpg', 'Living in the Music — Acrylic Painting')">
+        <img src="assets/images/living%20in%20the%20music.jpg" alt="Living in the Music"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Digital Painting</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Living in the Music</p>
+            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/oil-1.jpg', 'Oil Painting')">
-        <img src="assets/images/oil-1.jpg" alt="Oil Painting"
+           onclick="openLightbox('assets/images/Never%20a%20chance.jpeg', 'Never a Chance — Charcoal')">
+        <img src="assets/images/Never%20a%20chance.jpeg" alt="Never a Chance"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Oil Painting</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Never a Chance</p>
+            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/oil-2.jpg', 'Oil Painting')">
-        <img src="assets/images/oil-2.jpg" alt="Oil Painting"
+           onclick="openLightbox('assets/images/Reflections%20of%20the%20Self.jpg', 'Reflections of the Self — Acrylic Painting')">
+        <img src="assets/images/Reflections%20of%20the%20Self.jpg" alt="Reflections of the Self"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Oil Painting</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Reflections of the Self</p>
+            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/watercolor-1.jpg', 'Watercolor')">
-        <img src="assets/images/watercolor-1.jpg" alt="Watercolor"
+           onclick="openLightbox('assets/images/Smile.jpg', 'Smile — Acrylic Painting')">
+        <img src="assets/images/Smile.jpg" alt="Smile"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Watercolor</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Smile</p>
+            <p class="text-white/60 text-xs font-light">Charcoal</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/watercolor-2.jpg', 'Watercolor')">
-        <img src="assets/images/watercolor-2.jpg" alt="Watercolor"
+           onclick="openLightbox('assets/images/The%20Clock%20of%20Time%20.jpg', 'The Clock of Time — Acrylic Painting')">
+        <img src="assets/images/The%20Clock%20of%20Time%20.jpg" alt="The Clock of Time"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Watercolor</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">The Clock of Time</p>
+            <p class="text-white/60 text-xs font-light">Acrylic Painting</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/colorpencil-1.jpg', 'Color Pencil')">
-        <img src="assets/images/colorpencil-1.jpg" alt="Color Pencil"
+           onclick="openLightbox('assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG', 'Visitors to the Empty Canvas — Digital Art')">
+        <img src="assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG" alt="Visitors to the Empty Canvas"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Color Pencil</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Visitors to the Empty Canvas</p>
+            <p class="text-white/60 text-xs font-light">Ceramics</p>
+          </div>
         </div>
       </div>
       <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/colorpencil-2.jpg', 'Color Pencil')">
-        <img src="assets/images/colorpencil-2.jpg" alt="Color Pencil"
+           onclick="openLightbox('assets/images/Bird.jpg', 'Bird — Watercolor')">
+        <img src="assets/images/Bird.jpg" alt="Bird"
              class="w-full object-cover block"
              onerror="this.parentElement.style.display='none'"/>
         <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Color Pencil</div>
-        </div>
-      </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/oilpastel-1.jpg', 'Oil Pastel')">
-        <img src="assets/images/oilpastel-1.jpg" alt="Oil Pastel"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Oil Pastel</div>
-        </div>
-      </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/charcoal-1.jpg', 'Charcoal')">
-        <img src="assets/images/charcoal-1.jpg" alt="Charcoal"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Charcoal</div>
-        </div>
-      </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/ceramics-1.jpg', 'Ceramics')">
-        <img src="assets/images/ceramics-1.jpg" alt="Ceramics"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Ceramics</div>
-        </div>
-      </div>
-      <div class="art-item break-inside-avoid rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/ceramics-2.jpg', 'Ceramics')">
-        <img src="assets/images/ceramics-2.jpg" alt="Ceramics"
-             class="w-full object-cover block"
-             onerror="this.parentElement.style.display='none'"/>
-        <div class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/25 transition-colors flex items-end opacity-0 group-hover:opacity-100 pointer-events-none">
-          <div class="p-3 text-white text-xs font-medium">Ceramics</div>
+          <div class="p-3 w-full">
+            <p class="text-white text-xs font-medium leading-tight">Bird</p>
+            <p class="text-white/60 text-xs font-light">Watercolor</p>
+          </div>
         </div>
       </div>
     </div>
     <p class="text-xs text-stone-400 mt-6 reveal">
-      Rename your image files to match the names above (e.g. <code class="font-mono bg-stone-100 px-1 rounded">oil-1.jpg</code>, <code class="font-mono bg-stone-100 px-1 rounded">watercolor-1.jpg</code>) and place them in <code class="font-mono bg-stone-100 px-1 rounded">assets/images/</code>. Images that don't exist are automatically hidden.
+      Images load from <code class="font-mono bg-stone-100 px-1 rounded">assets/images/</code>. Pieces not yet uploaded are automatically hidden.
     </p>
   </div>
 </section>
@@ -854,6 +828,9 @@
         <div class="mt-8 flex flex-wrap gap-2">
           <span class="tag">Visual Storytelling</span>
           <span class="tag">Interaction Design</span>
+          <span class="tag">HCI</span>
+          <span class="tag">Product Design</span>
+          <span class="tag">Game Design</span>
           <span class="tag">AI Tools</span>
           <span class="tag">Neuroscience</span>
           <span class="tag">Guzheng</span>
@@ -872,10 +849,10 @@
         <div class="p-6 rounded-2xl bg-stone-50 border border-stone-100">
           <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-3">Exploring</p>
           <ul class="space-y-2 text-sm text-stone-600 font-light">
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span>AI-assisted creativity and design workflows</li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span>Interaction design for wearables and ambient tech</li>
+            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span>Product management, UX, and HCI</li>
+            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span>AI-assisted creativity and interaction design</li>
+            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span>Game design and immersive experience</li>
             <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span>Neuroscience as a lens for UX and empathy</li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span>Health equity in design and communication</li>
           </ul>
         </div>
         <div class="p-6 rounded-2xl bg-stone-50 border border-stone-100">

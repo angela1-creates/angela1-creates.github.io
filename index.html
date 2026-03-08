@@ -203,18 +203,87 @@
       <!-- Project 1 — Historical Place Stories -->
       <a href="projects/historical-place-stories/index.html"
          class="project-card reveal group block rounded-2xl overflow-hidden border border-stone-100 bg-stone-50 hover:border-stone-200">
-        <div class="aspect-[4/3] bg-gradient-to-br from-amber-50 to-stone-100 flex items-end p-6 relative overflow-hidden">
-          <!-- decorative -->
-          <div class="absolute inset-0 flex items-center justify-center opacity-10">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <circle cx="60" cy="60" r="50" stroke="#78716c" stroke-width="1"/>
-              <circle cx="60" cy="60" r="35" stroke="#78716c" stroke-width="1"/>
-              <circle cx="60" cy="60" r="20" stroke="#78716c" stroke-width="1"/>
-              <line x1="10" y1="60" x2="110" y2="60" stroke="#78716c" stroke-width="1"/>
-              <line x1="60" y1="10" x2="60" y2="110" stroke="#78716c" stroke-width="1"/>
-            </svg>
+        <div class="aspect-[4/3] relative overflow-hidden" style="background:#1c0f05;">
+          <!-- Comic header strip mimicking the comic page -->
+          <div class="absolute inset-0 flex flex-col">
+            <!-- Dark header -->
+            <div class="flex-shrink-0 h-10 flex items-center justify-center" style="background:#1c0f05;">
+              <p class="text-xs font-medium tracking-widest uppercase" style="color:#f2c043;font-family:serif;letter-spacing:.2em;">Lost in Time</p>
+            </div>
+            <!-- Paper panels grid -->
+            <div class="flex-1 grid grid-cols-2 gap-1 p-1" style="background:#2a1a08;">
+              <!-- Panel 1 — Senso-ji -->
+              <div class="rounded overflow-hidden flex items-center justify-center relative" style="background:#fdf8ec;">
+                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
+                  <!-- temple silhouette -->
+                  <rect x="0" y="0" width="80" height="60" fill="#fdf8ec"/>
+                  <rect x="25" y="35" width="30" height="20" fill="#c93030" opacity=".7"/>
+                  <polygon points="20,35 40,15 60,35" fill="#c93030" opacity=".8"/>
+                  <polygon points="15,35 40,10 65,35" fill="#8b1a1a" opacity=".5"/>
+                  <rect x="33" y="42" width="14" height="13" fill="#1c1209" opacity=".6"/>
+                  <line x1="5" y1="50" x2="75" y2="50" stroke="#d6cfc0" stroke-width="1"/>
+                  <!-- panel number -->
+                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
+                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">1</text>
+                </svg>
+              </div>
+              <!-- Panel 2 — Kai thinking -->
+              <div class="rounded overflow-hidden flex items-center justify-center" style="background:#fdf8ec;">
+                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
+                  <rect x="0" y="0" width="80" height="60" fill="#fdf8ec"/>
+                  <!-- speech bubble -->
+                  <ellipse cx="50" cy="20" rx="22" ry="13" fill="white" stroke="#1c1209" stroke-width="1.5"/>
+                  <text x="50" y="17" text-anchor="middle" font-size="6" fill="#1c1209">why can't I</text>
+                  <text x="50" y="25" text-anchor="middle" font-size="6" fill="#1c1209">remember?</text>
+                  <polygon points="38,30 32,38 44,33" fill="white" stroke="#1c1209" stroke-width="1"/>
+                  <!-- simple face -->
+                  <circle cx="25" cy="40" r="12" fill="#f4d0a0" stroke="#1c1209" stroke-width="1.5"/>
+                  <circle cx="21" cy="38" r="1.5" fill="#1c1209"/>
+                  <circle cx="29" cy="38" r="1.5" fill="#1c1209"/>
+                  <path d="M21 44 Q25 41 29 44" stroke="#1c1209" stroke-width="1" fill="none"/>
+                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
+                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">2</text>
+                </svg>
+              </div>
+              <!-- Panel 3 — lightbulb / idea -->
+              <div class="rounded overflow-hidden flex items-center justify-center" style="background:#fdf8ec;">
+                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
+                  <rect x="0" y="0" width="80" height="60" fill="#fdf8ec"/>
+                  <!-- glasses / StoryLens sketch -->
+                  <ellipse cx="32" cy="32" rx="14" ry="10" fill="none" stroke="#3a6e9a" stroke-width="2"/>
+                  <ellipse cx="56" cy="32" rx="14" ry="10" fill="none" stroke="#3a6e9a" stroke-width="2"/>
+                  <line x1="46" y1="32" x2="42" y2="32" stroke="#3a6e9a" stroke-width="2"/>
+                  <line x1="18" y1="32" x2="12" y2="30" stroke="#3a6e9a" stroke-width="2"/>
+                  <line x1="70" y1="32" x2="76" y2="30" stroke="#3a6e9a" stroke-width="2"/>
+                  <!-- HUD dots -->
+                  <circle cx="32" cy="32" r="3" fill="#f2c043" opacity=".8"/>
+                  <circle cx="56" cy="32" r="3" fill="#f2c043" opacity=".8"/>
+                  <text x="40" y="52" text-anchor="middle" font-size="6" fill="#3a6e9a" font-style="italic">StoryLens</text>
+                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
+                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">5</text>
+                </svg>
+              </div>
+              <!-- Panel 4 — Kai at night with glasses -->
+              <div class="rounded overflow-hidden flex items-center justify-center" style="background:#1a1a2e;">
+                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
+                  <rect x="0" y="0" width="80" height="60" fill="#1a1a2e"/>
+                  <!-- night temple -->
+                  <rect x="28" y="30" width="24" height="25" fill="#c93030" opacity=".5"/>
+                  <polygon points="22,30 40,14 58,30" fill="#c93030" opacity=".6"/>
+                  <!-- stars -->
+                  <circle cx="15" cy="10" r="1" fill="white" opacity=".8"/>
+                  <circle cx="65" cy="8" r="1" fill="white" opacity=".8"/>
+                  <circle cx="45" cy="5" r="1.5" fill="white" opacity=".9"/>
+                  <!-- HUD glow -->
+                  <ellipse cx="40" cy="25" rx="18" ry="8" fill="#3a6e9a" opacity=".2"/>
+                  <text x="40" y="27" text-anchor="middle" font-size="5" fill="#f2c043" opacity=".9">● story loading...</text>
+                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
+                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">10</text>
+                </svg>
+              </div>
+            </div>
           </div>
-          <span class="tag relative z-10">Comic · Design · Travel</span>
+          <span class="tag relative z-10 absolute bottom-3 left-3" style="background:rgba(28,15,5,0.7);border-color:#f2c043;color:#f2c043;">Comic · Design · Travel</span>
         </div>
         <div class="p-6">
           <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">Historical Place Stories</h3>

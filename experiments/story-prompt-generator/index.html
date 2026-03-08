@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Story Prompt Generator — Angela Wan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+    .display { font-family: 'DM Serif Display', serif; }
+    .display-italic { font-family: 'DM Serif Display', serif; font-style: italic; }
+
+    .card {
+      background: #fafaf9;
+      border: 1px solid #e7e5e4;
+      border-radius: 20px;
+      transition: box-shadow .3s ease, transform .3s ease;
+    }
+    .card:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.08); transform: translateY(-2px); }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 999px;
+      font-size: .72rem; font-weight: 500; letter-spacing: .06em;
+      text-transform: uppercase; cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .prompt-box {
+      background: white;
+      border: 1.5px solid #e7e5e4;
+      border-radius: 16px;
+      padding: 28px 32px;
+      min-height: 140px;
+      transition: border-color .3s;
+    }
+    .prompt-box.generating { border-color: #a8a29e; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.6 } }
+
+    .spin { animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .tag-chip {
+      display: inline-block; padding: 4px 12px; border-radius: 999px;
+      font-size: .72rem; font-weight: 500;
+      border: 1px solid #d6d3d1; color: #78716c;
+      cursor: pointer; transition: all .15s;
+      user-select: none;
+    }
+    .tag-chip.selected { background: #1c1917; color: white; border-color: #1c1917; }
+    .tag-chip:hover:not(.selected) { border-color: #78716c; color: #44403c; }
+
+    .copy-btn { transition: all .2s; }
+    .copy-btn.copied { background: #1c1917; color: white; }
+
+    /* fade in animation */
+    .fade-in { animation: fadeIn .5s ease both; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+  </style>
+</head>
+<body class="bg-stone-50 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="px-6 md:px-12 py-5 border-b border-stone-100 bg-stone-50/90 backdrop-blur sticky top-0 z-10">
+    <div class="max-w-3xl mx-auto flex items-center justify-between">
+      <a href="../../index.html" class="text-sm text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+        Angela Wan
+      </a>
+      <span class="text-xs text-stone-400 tracking-wide uppercase">Experiment</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="max-w-3xl mx-auto px-6 md:px-12 pt-16 pb-10">
+    <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-4">Vibe Coding · Experiment No. 1</p>
+    <h1 class="display text-5xl md:text-6xl text-stone-900 leading-tight mb-4">
+      Story Prompt<br/><span class="display-italic text-stone-400">Generator</span>
+    </h1>
+    <p class="text-stone-500 font-light leading-relaxed max-w-xl">
+      A small tool for generating story starters — built by combining visual storytelling research with interaction design. Pick a mood, a setting, and a theme, then generate a prompt to spark a new piece.
+    </p>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 md:px-12 pb-24">
+
+    <!-- Controls -->
+    <div class="space-y-6 mb-8">
+
+      <!-- Mood -->
+      <div class="card p-6">
+        <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-4">Mood</p>
+        <div class="flex flex-wrap gap-2" id="mood-chips">
+          <span class="tag-chip selected" data-group="mood">Melancholic</span>
+          <span class="tag-chip" data-group="mood">Hopeful</span>
+          <span class="tag-chip" data-group="mood">Tense</span>
+          <span class="tag-chip" data-group="mood">Whimsical</span>
+          <span class="tag-chip" data-group="mood">Quiet</span>
+          <span class="tag-chip" data-group="mood">Urgent</span>
+          <span class="tag-chip" data-group="mood">Dreamlike</span>
+          <span class="tag-chip" data-group="mood">Nostalgic</span>
+        </div>
+      </div>
+
+      <!-- Setting -->
+      <div class="card p-6">
+        <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-4">Setting</p>
+        <div class="flex flex-wrap gap-2" id="setting-chips">
+          <span class="tag-chip selected" data-group="setting">Ancient City</span>
+          <span class="tag-chip" data-group="setting">Quiet Suburb</span>
+          <span class="tag-chip" data-group="setting">Near-Future Tokyo</span>
+          <span class="tag-chip" data-group="setting">Underwater</span>
+          <span class="tag-chip" data-group="setting">Mountain Village</span>
+          <span class="tag-chip" data-group="setting">Backstage</span>
+          <span class="tag-chip" data-group="setting">Library at Night</span>
+          <span class="tag-chip" data-group="setting">Moving Train</span>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="card p-6">
+        <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-4">Theme</p>
+        <div class="flex flex-wrap gap-2" id="theme-chips">
+          <span class="tag-chip selected" data-group="theme">Memory</span>
+          <span class="tag-chip" data-group="theme">Identity</span>
+          <span class="tag-chip" data-group="theme">Connection</span>
+          <span class="tag-chip" data-group="theme">Loss</span>
+          <span class="tag-chip" data-group="theme">Discovery</span>
+          <span class="tag-chip" data-group="theme">Belonging</span>
+          <span class="tag-chip" data-group="theme">Time</span>
+          <span class="tag-chip" data-group="theme">Silence</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Generate button -->
+    <button id="generate-btn" onclick="generate()"
+            class="w-full bg-stone-900 text-white font-medium py-4 rounded-2xl hover:bg-stone-700 transition-colors flex items-center justify-center gap-3 mb-8 text-sm tracking-wide">
+      <svg id="btn-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+      </svg>
+      <span id="btn-text">Generate Prompt</span>
+    </button>
+
+    <!-- Output -->
+    <div id="output" class="hidden">
+      <div class="prompt-box mb-4" id="prompt-box">
+        <p id="prompt-text" class="text-stone-800 leading-relaxed text-lg font-light"></p>
+      </div>
+
+      <!-- Meta row -->
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="flex gap-2 flex-wrap" id="prompt-tags"></div>
+        <div class="flex gap-2">
+          <button id="copy-btn" onclick="copyPrompt()"
+                  class="copy-btn text-xs font-medium px-4 py-2 rounded-full border border-stone-300 text-stone-600 hover:border-stone-600 transition-all flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy
+          </button>
+          <button onclick="generate()"
+                  class="text-xs font-medium px-4 py-2 rounded-full border border-stone-300 text-stone-600 hover:border-stone-600 transition-all flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Regenerate
+          </button>
+        </div>
+      </div>
+
+      <!-- Saved prompts -->
+      <div id="saved-section" class="hidden mt-8">
+        <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-4">Saved Prompts</p>
+        <div id="saved-list" class="space-y-3"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-stone-100 px-6 md:px-12 py-6">
+    <div class="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-stone-400">
+      <a href="../../index.html" class="hover:text-stone-700 transition-colors">← Back to Portfolio</a>
+      <p>Built by Angela Wan · Vibe Coding Experiment · 2025</p>
+    </div>
+  </footer>
+
+<script>
+  // ── Prompt library ──────────────────────────────────────────────
+  const prompts = {
+    Melancholic: {
+      'Ancient City':       { Memory:     "A street musician plays a melody her late grandmother hummed each morning. She doesn't know the name of the song — only that it makes strangers stop walking.",
+                               Identity:   "He has lived in this city for forty years. Today, a demolition crew arrives for the building where he was born.",
+                               Connection: "Two people keep leaving notes in the same crumbling phone booth. Neither has seen the other.",
+                               Loss:       "She finds a photograph in a market stall. The face in it is hers — but the memory isn't.",
+                               Discovery:  "The archaeologist uncovers a wall covered in handprints. One matches hers exactly.",
+                               Belonging:  "He speaks the old language fluently. There is no one left to speak it with.",
+                               Time:       "The city clock stopped at 3:17 one hundred years ago. Tonight, it begins ticking again.",
+                               Silence:    "A composer returns to the city where she lost her hearing. She wants to hear it one last time through muscle memory." },
+      'Near-Future Tokyo':  { Memory:     "Memory clinics offer selective erasure. She books an appointment, then sits in the waiting room for six hours without going in.",
+                               Identity:   "His digital twin has lived a better life than he has. They meet for the first time.",
+                               Connection: "Two strangers discover they have shared the same dream every night for a year.",
+                               Loss:       "The AI companion she grew up with is being deprecated. She has 48 hours.",
+                               Discovery:  "A glitch in the city's AR layer reveals a hidden district no one has mapped.",
+                               Belonging:  "She is the only person in the city who still reads physical books. A stranger leaves one on her doorstep.",
+                               Time:       "The city runs on different time zones by district. She keeps missing her mother by exactly one hour.",
+                               Silence:    "A noise-cancellation app has made the city perfectly silent. People have started to forget what rain sounds like." },
+    },
+    Hopeful: {
+      'Mountain Village':   { Memory:     "Every spring, the village leaves empty chairs at the feast for those who left. This year, one of those people comes home.",
+                               Identity:   "A girl who was told she had no talent for music learns the mountain has been listening all along.",
+                               Connection: "Two rival farmers plant seeds on the same day. The crops grow toward each other.",
+                               Loss:       "The last beekeeper is dying. She spends her final season teaching a child who is afraid of bees.",
+                               Discovery:  "A shepherd finds a cave painting of a figure doing exactly what he does every morning.",
+                               Belonging:  "A family returns to a village they fled three generations ago. The house is still standing.",
+                               Time:       "An old woman plants a tree. Her granddaughter asks why. She says: someone planted one for me.",
+                               Silence:    "After the storm, the whole valley goes quiet. Then a single bird begins." },
+      'Quiet Suburb':       { Memory:     "She drives the same route she drove with her father every Sunday. She doesn't need to be anywhere.",
+                               Identity:   "A teenager discovers her mother's high school sketchbooks hidden in the attic.",
+                               Connection: "The new neighbors leave a casserole on the porch. It is the same recipe her grandmother made.",
+                               Loss:       "The community garden was abandoned for years. One spring morning, it blooms.",
+                               Discovery:  "A child finds a time capsule buried under the backyard. She writes a response and buries it back.",
+                               Belonging:  "A refugee family watches their first snowfall from the window of their new home.",
+                               Time:       "The oldest tree on the street is being cut down. Every family on the block brings their children to say goodbye.",
+                               Silence:    "The power goes out across the suburb. For the first time in years, everyone goes outside." },
+    },
+    Tense: {
+      'Backstage':          { Memory:     "Opening night. The lead actor realizes he has played this role before — not on stage.",
+                               Identity:   "The understudy has been waiting seven years. Tonight, the lead breaks her ankle twenty minutes before curtain.",
+                               Connection: "Two actors who haven't spoken in a decade are cast opposite each other.",
+                               Loss:       "The director dies during intermission. The cast has to decide whether to finish the show.",
+                               Discovery:  "A stagehand finds a set of instructions in an old prop box. They're written in tomorrow's date.",
+                               Belonging:  "A new cast member realizes she is the only one who doesn't know the real story behind the play.",
+                               Time:       "The show is running three minutes over. The theater has a hard curfew — and everyone knows what happens if it isn't met.",
+                               Silence:    "The microphone goes dead mid-monologue. The actor keeps going." },
+      'Moving Train':       { Memory:     "The woman across the aisle is reading a book he wrote under a different name, ten years ago.",
+                               Identity:   "She realizes halfway through the journey that she has someone else's ticket.",
+                               Connection: "A man gets on at every stop and sits in the same seat. He gets off before anyone can speak to him.",
+                               Loss:       "The train is the last one on this line. Everyone on it knows it.",
+                               Discovery:  "She finds a handwritten note slipped under her seat: 'Don't get off at the next stop.'",
+                               Belonging:  "An immigration officer boards at the border crossing. One passenger doesn't have their papers.",
+                               Time:       "The train is 40 minutes late. One passenger knows exactly why — and isn't saying.",
+                               Silence:    "Everyone on the train goes quiet at the same moment. No one knows who started it." },
+    },
+    Whimsical: {
+      'Library at Night':   { Memory:     "The books rearrange themselves by mood at midnight. Tonight, every sad book has moved to the same shelf.",
+                               Identity:   "A librarian discovers that some books contain lives that haven't happened yet.",
+                               Connection: "Two readers have been leaving margin notes for each other in the same book for twenty years.",
+                               Loss:       "A book goes missing. The library's cat is the only witness.",
+                               Discovery:  "She finds a book with her name on the spine — but she hasn't written it yet.",
+                               Belonging:  "A child who never fits in anywhere finds that she fits perfectly inside a particular story.",
+                               Time:       "Time passes differently inside the library. Readers sometimes emerge decades younger.",
+                               Silence:    "The loudest book in the library refuses to be read. It just wants to be heard." },
+      Underwater:           { Memory:     "An octopus collects objects from sunken ships, arranging them the way she remembers her home.",
+                               Identity:   "A diver discovers she can breathe underwater — but only when she stops trying.",
+                               Connection: "A message in a bottle reaches its destination 200 years late. The reply comes back the next morning.",
+                               Loss:       "A whale sings a song no one has heard in 50 years. Scientists think it's calling for something extinct.",
+                               Discovery:  "A mapping expedition finds a city on the ocean floor that doesn't appear in any history.",
+                               Belonging:  "A child raised on land meets her grandmother, who chose the sea.",
+                               Time:       "Underwater, she doesn't age. She has watched the world change for four hundred years.",
+                               Silence:    "The deep ocean is not silent. She records what she hears. No one believes her." },
+    },
+    Quiet: {
+      'Quiet Suburb':       { Memory:     "She wakes up at 4am every morning for no reason — the same time her mother used to bake.",
+                               Identity:   "He has lived the same Tuesday for thirty years. Today he notices something different.",
+                               Connection: "Two neighbors wave every morning for eleven years without ever speaking. One of them is moving away.",
+                               Loss:       "The old bookstore on the corner is closing. She buys the last book on the shelf without looking at the title.",
+                               Discovery:  "Behind the wallpaper in the old house, she finds handwriting. Hundreds of letters, never sent.",
+                               Belonging:  "A neighborhood forms around a single tree no one planted.",
+                               Time:       "She photographs the same corner every day for ten years. She finally develops the film.",
+                               Silence:    "After her children leave home, she notices how loud the house actually is." },
+      'Mountain Village':   { Memory:     "An old man walks the perimeter of the village every evening. No one knows why — until he doesn't come back.",
+                               Identity:   "She inherits her grandmother's name, her grandmother's house, and her grandmother's unfinished argument.",
+                               Connection: "Two shepherds have shared a stone wall for forty years. They have never fixed it.",
+                               Loss:       "The village well goes dry. Everyone gathers around it, not sure what they're mourning.",
+                               Discovery:  "A hunter finds a clearing with a single chair, a table, and a cold cup of tea.",
+                               Belonging:  "A stranger arrives in winter and is taken in. By spring, no one remembers she wasn't always there.",
+                               Time:       "The oldest woman in the village refuses to die until she has said something. No one knows what.",
+                               Silence:    "After the last child leaves for the city, the village becomes quieter than it has ever been — and something begins to stir." },
+    },
+    Urgent: {
+      'Moving Train':       { Memory:     "She remembers everything about the accident except one detail. It's the only detail that matters.",
+                               Identity:   "He has been traveling under someone else's name for six months. He's almost home.",
+                               Connection: "A stranger passes her a phone number on a napkin and says: call this when you arrive.",
+                               Loss:       "The train is carrying something irreplaceable. She doesn't know what — only that someone will meet her at the end of the line.",
+                               Discovery:  "A compartment at the end of the train is locked. Inside, a light is on.",
+                               Belonging:  "She is being deported. The train goes in the wrong direction.",
+                               Time:       "She has four stops to convince a stranger not to make the biggest mistake of his life.",
+                               Silence:    "Everyone on the train has stopped speaking. She is the only one who notices." },
+      'Near-Future Tokyo':  { Memory:     "Her memory has been partially backed up. The missing 72 hours contain something she is desperate to recover.",
+                               Identity:   "Someone has filed a digital death certificate for her. She is legally no longer a person.",
+                               Connection: "A message arrives from herself — sent from three years in the future. It says one word.",
+                               Loss:       "Her city district has 6 hours before it is wiped from the network and rebuilt.",
+                               Discovery:  "A deleted file reappears on her screen. It was erased before she was born.",
+                               Belonging:  "Her biometric data no longer matches any known identity. She has 48 hours before access to everything is cut.",
+                               Time:       "She has been living the same three-day loop for what feels like years. Tonight she breaks it.",
+                               Silence:    "The city's ambient noise grid goes down. In the silence, she hears something she shouldn't." },
+    },
+    Dreamlike: {
+      Underwater:           { Memory:     "She is searching for a memory she isn't sure is hers — but the ocean keeps returning it.",
+                               Identity:   "Every night she becomes something else. She is starting to forget which version is real.",
+                               Connection: "She finds a door at the bottom of the sea. Someone is knocking from the other side.",
+                               Loss:       "She is looking for the place where she left her voice.",
+                               Discovery:  "The ocean has a room she has never found before. Tonight, it finds her.",
+                               Belonging:  "She was born on land. She has always known she belongs somewhere else.",
+                               Time:       "Underwater, the past and future exist simultaneously. She can only move forward.",
+                               Silence:    "She descends until the light is gone and all she can hear is herself." },
+      'Library at Night':   { Memory:     "Every book in the library contains a life she almost lived.",
+                               Identity:   "The book with her name on the spine is different every time she opens it.",
+                               Connection: "Somewhere in the stacks, a book is calling for her specifically.",
+                               Loss:       "A whole section of the library is fading. By morning it will be gone.",
+                               Discovery:  "She opens a book and falls in.",
+                               Belonging:  "She has been in the library so long she has become part of the shelving.",
+                               Time:       "The library contains books that haven't been written yet. She reads the last page of one.",
+                               Silence:    "When all the books are closed, the library whispers what it has been keeping to itself." },
+    },
+    Nostalgic: {
+      'Quiet Suburb':       { Memory:     "She drives past her childhood house. The new owners have painted it the color she always wanted.",
+                               Identity:   "She finds her old diary and doesn't recognize the person who wrote it.",
+                               Connection: "She calls a number she memorized at age seven. Someone answers.",
+                               Loss:       "The convenience store where she spent every summer afternoon is being demolished. She goes to say goodbye.",
+                               Discovery:  "In a box in her mother's attic, she finds every birthday card she ever made as a child.",
+                               Belonging:  "She moves back to the neighborhood she grew up in. Nothing is the same. She is glad.",
+                               Time:       "She teaches her daughter the same songs her grandmother taught her. She doesn't know where they came from.",
+                               Silence:    "The house is quiet in a way it never was when she was growing up. She finally understands why." },
+      'Ancient City':       { Memory:     "She visits the city her parents left before she was born. She recognizes it.",
+                               Identity:   "He is the last person alive who remembers the city before the war.",
+                               Connection: "Two strangers discover they grew up on the same street thirty years apart.",
+                               Loss:       "The last restaurant that still serves the old recipe is closing tonight.",
+                               Discovery:  "She finds her grandmother's name carved into a stone in a courtyard. Below it: a message.",
+                               Belonging:  "She has lived in every city in the world. She always ends up back here.",
+                               Time:       "The city has been rebuilt so many times that no one agrees on how old it is.",
+                               Silence:    "She sits in the square where her family used to gather. The city moves around her." },
+    },
+  };
+
+  // Fallback generic prompts
+  const fallback = [
+    "She opened the letter that had been waiting for her since before she was born.",
+    "He had one photograph of a place he'd never been. He spent his whole life looking for it.",
+    "The last thing she expected to find at the end of the world was a small café, still open.",
+    "They had been strangers for thirty years. The city had simply forgotten to introduce them.",
+    "Something was wrong with the light. She was the only one who noticed.",
+    "He had been carrying someone else's name for so long he'd forgotten the weight of his own.",
+    "The silence after the last note wasn't empty. It was listening.",
+    "She drew the same face every day for ten years. Then she met her.",
+  ];
+
+  let currentPrompt = '';
+  let savedPrompts = [];
+
+  // Single-select chip logic
+  document.querySelectorAll('.tag-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const group = chip.dataset.group;
+      document.querySelectorAll(`.tag-chip[data-group="${group}"]`).forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+  });
+
+  function getSelected(group) {
+    const el = document.querySelector(`.tag-chip.selected[data-group="${group}"]`);
+    return el ? el.textContent.trim() : null;
+  }
+
+  function generate() {
+    const mood = getSelected('mood');
+    const setting = getSelected('setting');
+    const theme = getSelected('theme');
+
+    const btn = document.getElementById('generate-btn');
+    const btnIcon = document.getElementById('btn-icon');
+    const btnText = document.getElementById('btn-text');
+    const box = document.getElementById('prompt-box');
+
+    // Loading state
+    btn.disabled = true;
+    btnIcon.classList.add('spin');
+    btnText.textContent = 'Generating…';
+    box.classList.add('generating');
+
+    setTimeout(() => {
+      // Try to find exact match, then partial, then fallback
+      let prompt = null;
+      if (mood && setting && theme && prompts[mood]?.[setting]?.[theme]) {
+        prompt = prompts[mood][setting][theme];
+      } else {
+        // Try mood + theme with any setting
+        const moodData = prompts[mood];
+        if (moodData) {
+          for (const s of Object.keys(moodData)) {
+            if (moodData[s][theme]) { prompt = moodData[s][theme]; break; }
+          }
+        }
+      }
+      if (!prompt) {
+        prompt = fallback[Math.floor(Math.random() * fallback.length)];
+      }
+
+      currentPrompt = prompt;
+
+      // Show output
+      const output = document.getElementById('output');
+      output.classList.remove('hidden');
+      output.classList.add('fade-in');
+
+      const promptText = document.getElementById('prompt-text');
+      promptText.textContent = '';
+      box.classList.remove('generating');
+
+      // Typewriter effect
+      let i = 0;
+      const type = () => {
+        if (i < prompt.length) {
+          promptText.textContent += prompt[i++];
+          setTimeout(type, 18);
+        }
+      };
+      type();
+
+      // Tags
+      const tagsEl = document.getElementById('prompt-tags');
+      tagsEl.innerHTML = [mood, setting, theme].filter(Boolean).map(t =>
+        `<span class="text-xs px-3 py-1 rounded-full bg-stone-100 text-stone-500 font-light">${t}</span>`
+      ).join('');
+
+      // Reset button
+      btn.disabled = false;
+      btnIcon.classList.remove('spin');
+      btnText.textContent = 'Generate Prompt';
+      btnIcon.innerHTML = `<path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>`;
+
+    }, 700);
+  }
+
+  function copyPrompt() {
+    if (!currentPrompt) return;
+    navigator.clipboard.writeText(currentPrompt).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.classList.add('copied');
+      btn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Copied`;
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+      }, 2000);
+    });
+  }
+
+  // Generate on load
+  window.onload = () => setTimeout(generate, 300);
+</script>
+</body>
+</html>

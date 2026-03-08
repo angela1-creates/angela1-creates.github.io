@@ -100,8 +100,8 @@
     <!-- Desktop nav -->
     <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-500">
       <li><a href="#projects"    class="link-under hover:text-stone-900 transition-colors">Projects</a></li>
-      <li><a href="#art"         class="link-under hover:text-stone-900 transition-colors">Art</a></li>
       <li><a href="#experiments" class="link-under hover:text-stone-900 transition-colors">Experiments</a></li>
+      <li><a href="#art"         class="link-under hover:text-stone-900 transition-colors">Art</a></li>
       <li><a href="#performance" class="link-under hover:text-stone-900 transition-colors">Performance</a></li>
       <li><a href="#community"   class="link-under hover:text-stone-900 transition-colors">Community</a></li>
       <li><a href="#learning"    class="link-under hover:text-stone-900 transition-colors">Learning</a></li>
@@ -122,8 +122,8 @@
   <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-stone-50/95 backdrop-blur-md border-b border-stone-200 px-6 py-6">
     <ul class="flex flex-col gap-5 text-sm font-medium text-stone-600">
       <li><a href="#projects"    class="hover:text-stone-900" onclick="closeMobile()">Projects</a></li>
-      <li><a href="#art"         class="hover:text-stone-900" onclick="closeMobile()">Art</a></li>
       <li><a href="#experiments" class="hover:text-stone-900" onclick="closeMobile()">Experiments</a></li>
+      <li><a href="#art"         class="hover:text-stone-900" onclick="closeMobile()">Art</a></li>
       <li><a href="#performance" class="hover:text-stone-900" onclick="closeMobile()">Performance</a></li>
       <li><a href="#community"   class="hover:text-stone-900" onclick="closeMobile()">Community</a></li>
       <li><a href="#learning"    class="hover:text-stone-900" onclick="closeMobile()">Learning</a></li>
@@ -341,78 +341,103 @@
         </div>
       </a>
 
-      <!-- Project 4 — StoryLens Smart Glasses -->
-      <a href="https://github.com/angela1-creates/" target="_blank"
-         class="project-card reveal group block rounded-2xl overflow-hidden border border-stone-100 bg-stone-50 hover:border-stone-200">
-        <div class="aspect-[4/3] bg-gradient-to-br from-teal-50 to-emerald-50 flex items-end p-6 relative overflow-hidden">
-          <div class="absolute inset-0 flex items-center justify-center opacity-10">
-            <svg width="140" height="60" viewBox="0 0 140 60" fill="none">
-              <ellipse cx="40" cy="30" rx="32" ry="22" stroke="#0d9488" stroke-width="1.5"/>
-              <ellipse cx="100" cy="30" rx="32" ry="22" stroke="#0d9488" stroke-width="1.5"/>
-              <line x1="72" y1="30" x2="68" y2="30" stroke="#0d9488" stroke-width="1.5"/>
-              <line x1="8" y1="30" x2="0" y2="28" stroke="#0d9488" stroke-width="1.5"/>
-              <line x1="132" y1="30" x2="140" y2="28" stroke="#0d9488" stroke-width="1.5"/>
-            </svg>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     EXPERIMENTS
+══════════════════════════════════════════════ -->
+<section id="experiments" class="px-6 md:px-12 bg-white">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="mb-16 reveal">
+      <span class="section-line mb-6"></span>
+      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Experiments</h2>
+      <p class="text-stone-500 font-light max-w-xl">Small creative explorations combining storytelling, design, and interaction.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <!-- ── LIVE: Vibe Coding — Story Prompt Generator ── -->
+      <a href="experiments/story-prompt-generator/index.html"
+         class="reveal group block rounded-2xl border border-stone-100 bg-stone-50 hover:border-stone-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+        <div class="aspect-[4/3] bg-gradient-to-br from-stone-900 to-stone-700 flex flex-col items-center justify-center gap-3 p-6 relative overflow-hidden">
+          <!-- animated shimmer -->
+          <div class="absolute inset-0 opacity-10" style="background: repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%); background-size:12px 12px;"></div>
+          <!-- icon -->
+          <div class="relative z-10 w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
           </div>
-          <span class="tag relative z-10 border-teal-200 text-teal-500">UX · Wearable · Concept</span>
+          <p class="relative z-10 text-white/50 text-xs font-mono tracking-widest uppercase">mood · setting · theme</p>
+          <p class="relative z-10 text-white text-sm font-light italic text-center leading-snug max-w-[180px]">"She opened the letter that had been waiting since before she was born."</p>
+          <span class="relative z-10 mt-1 text-xs font-medium tracking-widest uppercase px-3 py-1 rounded-full border border-white/20 text-white/70">Live ↗</span>
         </div>
         <div class="p-6">
-          <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">StoryLens — Smart Glasses Concept</h3>
-          <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">A wearable interaction design concept: lightweight smart glasses that surface location-aware historical stories through a HUD overlay and bone-conduction audio.</p>
+          <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">Story Prompt Generator</h3>
+          <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">Pick a mood, setting, and theme — get a story starter. Built as a vibe coding experiment combining creative writing research with simple interaction design.</p>
           <span class="text-xs text-stone-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-            View on GitHub
+            Try it
             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </span>
         </div>
       </a>
 
-      <!-- Project 5 — Patient Education -->
-      <a href="https://github.com/angela1-creates/" target="_blank"
-         class="project-card reveal reveal-delay-1 group block rounded-2xl overflow-hidden border border-stone-100 bg-stone-50 hover:border-stone-200">
-        <div class="aspect-[4/3] bg-gradient-to-br from-violet-50 to-purple-50 flex items-end p-6 relative overflow-hidden">
-          <div class="absolute inset-0 flex items-center justify-center opacity-10">
-            <svg width="100" height="120" viewBox="0 0 100 120" fill="none">
-              <rect x="15" y="10" width="70" height="100" rx="6" stroke="#7c3aed" stroke-width="1.5"/>
-              <line x1="28" y1="35" x2="72" y2="35" stroke="#7c3aed" stroke-width="1"/>
-              <line x1="28" y1="50" x2="72" y2="50" stroke="#7c3aed" stroke-width="1"/>
-              <line x1="28" y1="65" x2="60" y2="65" stroke="#7c3aed" stroke-width="1"/>
-              <line x1="28" y1="80" x2="55" y2="80" stroke="#7c3aed" stroke-width="1"/>
-            </svg>
-          </div>
-          <span class="tag relative z-10 border-violet-200 text-violet-400">Health · Typography · UX</span>
+      <!-- ── UPCOMING: AI-Assisted Design ── -->
+      <div class="reveal block rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 overflow-hidden opacity-60">
+        <div class="aspect-[4/3] bg-gradient-to-br from-violet-50 to-indigo-50 flex items-center justify-center">
+          <span class="text-xs font-medium tracking-widest uppercase text-stone-400 border border-stone-300 rounded-full px-3 py-1">Upcoming</span>
         </div>
         <div class="p-6">
-          <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">Diabetes Patient Education Pamphlet</h3>
-          <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">Accessible patient-education design created at Georgetown Pre-College. Focused on clarity and accessibility in communicating medical information to diabetic users.</p>
-          <span class="text-xs text-stone-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-            View on GitHub
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
+          <h3 class="font-medium text-stone-500 mb-2">AI-Assisted Design</h3>
+          <p class="text-sm text-stone-400 font-light leading-relaxed">Exploring how AI tools — from image generation to code assistants — can extend creative workflows. What happens when you treat AI as a collaborator, not just a tool?</p>
         </div>
-      </a>
+      </div>
 
-      <!-- Project 6 — Neurological Disorders Research -->
-      <a href="https://github.com/angela1-creates/" target="_blank"
-         class="project-card reveal reveal-delay-2 group block rounded-2xl overflow-hidden border border-stone-100 bg-stone-50 hover:border-stone-200">
-        <div class="aspect-[4/3] bg-gradient-to-br from-orange-50 to-amber-50 flex items-end p-6 relative overflow-hidden">
-          <div class="absolute inset-0 flex items-center justify-center opacity-10">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <circle cx="60" cy="60" r="40" stroke="#d97706" stroke-width="1.5"/>
-              <path d="M60 20 Q80 40 60 60 Q40 80 60 100" stroke="#d97706" stroke-width="1.5"/>
-              <path d="M20 60 Q40 40 60 60 Q80 80 100 60" stroke="#d97706" stroke-width="1.5"/>
-            </svg>
-          </div>
-          <span class="tag relative z-10 border-amber-200 text-amber-500">Neuroscience · Research · Design</span>
+      <!-- ── UPCOMING: Interaction Design Concepts ── -->
+      <div class="reveal block rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 overflow-hidden opacity-60">
+        <div class="aspect-[4/3] bg-gradient-to-br from-teal-50 to-cyan-50 flex items-center justify-center">
+          <span class="text-xs font-medium tracking-widest uppercase text-stone-400 border border-stone-300 rounded-full px-3 py-1">Upcoming</span>
         </div>
         <div class="p-6">
-          <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">Neurological Disorders &amp; UX</h3>
-          <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">Exploring how insights from neuroscience — studied at Johns Hopkins CTY — might inform user-centered design. How do neurological systems shape how people experience and navigate interfaces?</p>
-          <span class="text-xs text-stone-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-            View on GitHub
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
+          <h3 class="font-medium text-stone-500 mb-2">Interaction Design Concepts</h3>
+          <p class="text-sm text-stone-400 font-light leading-relaxed">Sketching and prototyping how people might interact with future interfaces — wearables, ambient displays, and context-aware tools that surface information naturally.</p>
         </div>
-      </a>
+      </div>
+
+      <!-- ── UPCOMING: StoryLens Smart Glasses ── -->
+      <div class="reveal block rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 overflow-hidden opacity-60">
+        <div class="aspect-[4/3] bg-gradient-to-br from-teal-50 to-emerald-50 flex items-center justify-center">
+          <span class="text-xs font-medium tracking-widest uppercase text-stone-400 border border-stone-300 rounded-full px-3 py-1">Upcoming</span>
+        </div>
+        <div class="p-6">
+          <h3 class="font-medium text-stone-500 mb-2">StoryLens — Smart Glasses Concept</h3>
+          <p class="text-sm text-stone-400 font-light leading-relaxed">A wearable interaction design concept: lightweight smart glasses that surface location-aware historical stories through a HUD overlay and bone-conduction audio.</p>
+        </div>
+      </div>
+
+      <!-- ── UPCOMING: Diabetes Patient Education ── -->
+      <div class="reveal block rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 overflow-hidden opacity-60">
+        <div class="aspect-[4/3] bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center">
+          <span class="text-xs font-medium tracking-widest uppercase text-stone-400 border border-stone-300 rounded-full px-3 py-1">Upcoming</span>
+        </div>
+        <div class="p-6">
+          <h3 class="font-medium text-stone-500 mb-2">Diabetes Patient Education Pamphlet</h3>
+          <p class="text-sm text-stone-400 font-light leading-relaxed">Accessible patient-education design from Georgetown Pre-College. Focused on clarity and accessibility in communicating medical information to diabetic users.</p>
+        </div>
+      </div>
+
+      <!-- ── UPCOMING: Neurological Disorders & UX ── -->
+      <div class="reveal block rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 overflow-hidden opacity-60">
+        <div class="aspect-[4/3] bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+          <span class="text-xs font-medium tracking-widest uppercase text-stone-400 border border-stone-300 rounded-full px-3 py-1">Upcoming</span>
+        </div>
+        <div class="p-6">
+          <h3 class="font-medium text-stone-500 mb-2">Neurological Disorders &amp; UX</h3>
+          <p class="text-sm text-stone-400 font-light leading-relaxed">Exploring how neuroscience insights from Johns Hopkins CTY might inform user-centered design and how neurological systems shape the way people navigate interfaces.</p>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -433,252 +458,148 @@
 
     <!-- Gallery — horizontal scroll strip -->
     <div class="relative reveal">
-      <!-- Scroll container -->
       <div class="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 md:-mx-12 md:px-12 scroll-smooth"
            id="art-scroll"
            style="scrollbar-width: thin; scrollbar-color: #d6d3d1 transparent;">
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Building%20of%20Myself.jpg', 'Building of Myself — Digital Painting')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Building%20of%20Myself.jpg" alt="Building of Myself"
-               loading="lazy"
+          <img src="assets/images/Building%20of%20Myself.jpg" alt="Building of Myself" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Building of Myself</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Digital Painting</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Building of Myself</p><p class="text-white/60 text-xs font-light mt-0.5">Digital Painting</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Contours%20of%20Becoming.jpg', 'Contours of Becoming — 3D Experiment &amp; Color Pencil')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Contours%20of%20Becoming.jpg" alt="Contours of Becoming"
-               loading="lazy"
+          <img src="assets/images/Contours%20of%20Becoming.jpg" alt="Contours of Becoming" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Contours of Becoming</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">3D Experiment &amp; Color Pencil</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Contours of Becoming</p><p class="text-white/60 text-xs font-light mt-0.5">3D Experiment &amp; Color Pencil</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Exploration%20of%20Patterns.JPG', 'Exploration of Patterns — Ceramics')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Exploration%20of%20Patterns.JPG" alt="Exploration of Patterns"
-               loading="lazy"
+          <img src="assets/images/Exploration%20of%20Patterns.JPG" alt="Exploration of Patterns" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Exploration of Patterns</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Ceramics</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Exploration of Patterns</p><p class="text-white/60 text-xs font-light mt-0.5">Ceramics</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/living%20in%20the%20music.jpg', 'Living in the Music — Acrylic Painting')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/living%20in%20the%20music.jpg" alt="Living in the Music"
-               loading="lazy"
+          <img src="assets/images/living%20in%20the%20music.jpg" alt="Living in the Music" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Living in the Music</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Living in the Music</p><p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Never%20a%20chance.jpeg', 'Never a Chance — Charcoal')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Never%20a%20chance.jpeg" alt="Never a Chance"
-               loading="lazy"
+          <img src="assets/images/Never%20a%20chance.jpeg" alt="Never a Chance" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Never a Chance</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Charcoal</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Never a Chance</p><p class="text-white/60 text-xs font-light mt-0.5">Charcoal</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Reflections%20of%20the%20Self.jpg', 'Reflections of the Self — Acrylic Painting')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Reflections%20of%20the%20Self.jpg" alt="Reflections of the Self"
-               loading="lazy"
+          <img src="assets/images/Reflections%20of%20the%20Self.jpg" alt="Reflections of the Self" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Reflections of the Self</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Reflections of the Self</p><p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Smile.jpg', 'Smile — Acrylic Painting')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Smile.jpg" alt="Smile"
-               loading="lazy"
+          <img src="assets/images/Smile.jpg" alt="Smile" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Smile</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Smile</p><p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/The%20Clock%20of%20Time.jpg', 'The Clock of Time — Acrylic Painting')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/The%20Clock%20of%20Time.jpg" alt="The Clock of Time"
-               loading="lazy"
+          <img src="assets/images/The%20Clock%20of%20Time.jpg" alt="The Clock of Time" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">The Clock of Time</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">The Clock of Time</p><p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG', 'Visitors to the Empty Canvas — Digital Art')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG" alt="Visitors to the Empty Canvas"
-               loading="lazy"
+          <img src="assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG" alt="Visitors to the Empty Canvas" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Visitors to the Empty Canvas</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Digital Art</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Visitors to the Empty Canvas</p><p class="text-white/60 text-xs font-light mt-0.5">Digital Art</p></div>
         </div>
       </div>
+
       <div class="art-scroll-item flex-shrink-0 w-64 md:w-72 rounded-xl overflow-hidden relative group cursor-zoom-in"
            onclick="openLightbox('assets/images/Bird.jpg', 'Bird — Watercolor')">
         <div class="h-80 bg-stone-100 overflow-hidden">
-          <img src="assets/images/Bird.jpg" alt="Bird"
-               loading="lazy"
+          <img src="assets/images/Bird.jpg" alt="Bird" loading="lazy"
                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.parentElement.parentElement.style.display='none'"/>
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-4 w-full">
-            <p class="text-white text-sm font-medium leading-tight">Bird</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Watercolor</p>
-          </div>
+          <div class="p-4 w-full"><p class="text-white text-sm font-medium leading-tight">Bird</p><p class="text-white/60 text-xs font-light mt-0.5">Watercolor</p></div>
         </div>
       </div>
-      </div>
 
-      <!-- Scroll hint fade on right -->
+      </div>
       <div class="pointer-events-none absolute right-0 top-0 bottom-4 w-16 bg-gradient-to-l from-stone-50 to-transparent hidden md:block"></div>
     </div>
 
-    <!-- Scroll nav dots -->
     <div class="flex items-center justify-between mt-5 reveal">
-      <p class="text-xs text-stone-400">
-        Scroll to see all 10 pieces &nbsp;·&nbsp; Click any piece to view full size
-      </p>
+      <p class="text-xs text-stone-400">Scroll to see all 10 pieces &nbsp;·&nbsp; Click any piece to view full size</p>
       <div class="flex gap-2">
         <button onclick="document.getElementById('art-scroll').scrollBy({left:-300,behavior:'smooth'})"
-                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all group">
+                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
         </button>
         <button onclick="document.getElementById('art-scroll').scrollBy({left:300,behavior:'smooth'})"
-                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all group">
+                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
     </div>
-  </div>
-</section>
 
-
-<!-- ══════════════════════════════════════════════
-     LIGHTBOX
-══════════════════════════════════════════════ -->
-<div id="lightbox" onclick="closeLightbox()">
-  <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white/60 hover:text-white transition-colors z-10">
-    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
-  </button>
-  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()" />
-  <p id="lightbox-caption" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm font-light"></p>
-</div>
-
-
-<!-- ══════════════════════════════════════════════
-     EXPERIMENTS
-══════════════════════════════════════════════ -->
-<section id="experiments" class="px-6 md:px-12 bg-white">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="mb-16 reveal">
-      <span class="section-line mb-6"></span>
-      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Experiments</h2>
-      <p class="text-stone-500 font-light max-w-xl">Small creative explorations combining storytelling, design, and interaction.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-      <div class="reveal group">
-        <div class="w-10 h-10 rounded-2xl bg-stone-100 flex items-center justify-center mb-5 group-hover:bg-stone-900 transition-colors duration-300">
-          <svg class="w-5 h-5 text-stone-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
-        </div>
-        <h3 class="font-medium text-stone-900 mb-2">AI-Assisted Design</h3>
-        <p class="text-sm text-stone-500 font-light leading-relaxed">Exploring how AI tools — from image generation to code assistants — can extend creative workflows. What happens when you treat AI as a collaborator, not just a tool?</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="tag">Generative AI</span>
-          <span class="tag">Workflow</span>
-          <span class="tag">Ideation</span>
-        </div>
-      </div>
-
-      <div class="reveal reveal-delay-1 group">
-        <div class="w-10 h-10 rounded-2xl bg-stone-100 flex items-center justify-center mb-5 group-hover:bg-stone-900 transition-colors duration-300">
-          <svg class="w-5 h-5 text-stone-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
-        </div>
-        <h3 class="font-medium text-stone-900 mb-2">Vibe Coding Prototypes</h3>
-        <p class="text-sm text-stone-500 font-light leading-relaxed">Building small interactive things using AI coding assistants and rapid prototyping — prioritizing feel and interaction over polish. Ideas first, code second.</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="tag">HTML/CSS</span>
-          <span class="tag">Interaction</span>
-          <span class="tag">Rapid Prototype</span>
-        </div>
-      </div>
-
-      <div class="reveal reveal-delay-2 group">
-        <div class="w-10 h-10 rounded-2xl bg-stone-100 flex items-center justify-center mb-5 group-hover:bg-stone-900 transition-colors duration-300">
-          <svg class="w-5 h-5 text-stone-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zm0 9.75C2.25 16.254 2.754 15.75 3.375 15.75h6c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-1.5zm9.75-9.75c0-.621.504-1.125 1.125-1.125h6c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125V7.125z"/></svg>
-        </div>
-        <h3 class="font-medium text-stone-900 mb-2">Interaction Design Concepts</h3>
-        <p class="text-sm text-stone-500 font-light leading-relaxed">Sketching and prototyping how people might interact with future interfaces — wearables, ambient displays, and context-aware tools that surface information naturally.</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="tag">UX</span>
-          <span class="tag">Wearable</span>
-          <span class="tag">Concept</span>
-        </div>
-      </div>
-
-    </div>
   </div>
 </section>
 
@@ -1123,4 +1044,21 @@
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-  function closeLightb
+  function closeLightb  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+
+<!-- Lightbox overlay -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button onclick="closeLightbox()" style="position:fixed;top:20px;right:24px;background:none;border:none;color:white;font-size:28px;cursor:pointer;z-index:10000;line-height:1;">×</button>
+  <div style="text-align:center;">
+    <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
+    <p id="lightbox-caption" style="color:rgba(255,255,255,0.5);font-size:.8rem;margin-top:12px;font-family:'DM Sans',sans-serif;font-weight:300;letter-spacing:.05em;"></p>
+  </div>
+</div>
+
+</body>
+</html>

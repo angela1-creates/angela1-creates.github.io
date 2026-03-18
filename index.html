@@ -1,1133 +1,957 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Angela Wan — Designer · Artist · Builder</title>
-  <meta name="description" content="Angela Wan — artist, designer, creative technologist, and builder from San Jose, CA. UX, HCI, AI-assisted creativity, and visual storytelling." />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <title>Historical Place Stories – Interactive Prototype</title>
+
+  <!--
+    ================================================================
+    HISTORICAL PLACE STORIES — Interactive Narrative Prototype
+    by Angela W
+    ================================================================
+    Single-file static app. Deploy to GitHub Pages with no build step.
+
+    ENHANCEMENTS IN THIS VERSION:
+      - Scene glyph: large centered emoji/symbol per scene
+      - Sentence fade-in: each <span class="s"> fades in sequentially
+      - Dot progress: ● ○ ○ style indicator replaces bar
+      - Improved choice cards: lift, background highlight, more spacing
+
+    HOW TO EDIT STORY TEXT:
+      Find the scene by its id (e.g. id="scene-intro") and edit the
+      <span class="s"> elements inside .scene-text.
+      Each <span class="s"> is one sentence — staggered fade handled by CSS.
+
+    HOW TO CHANGE A SCENE GLYPH:
+      Edit the character inside <div class="scene-glyph">.
+
+    HOW TO ADD A NEW SCENE:
+      1. Copy any <section class="scene"> block, give it a unique id.
+      2. Update data-step and data-total on the .progress element.
+      3. Point the previous screen's button: onclick="goTo('your-id')"
+    ================================================================
+  -->
 
   <style>
-    /* ── Base ─────────────────────────────────────────────── */
+    /* ── Google Fonts ─────────────────────────────────────────────
+       Cormorant Garamond — literary display headings
+       DM Sans           — clean body and UI text
+    ──────────────────────────────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+    /* ── Design Tokens ───────────────────────────────────────────── */
+    :root {
+      --ink:         #1a1714;
+      --paper:       #f5f0e8;
+      --paper-mid:   #ede7d9;
+      --paper-light: #fdfaf5;
+      --gold:        #b8966a;
+      --gold-light:  #d4b896;
+      --muted:       #7a7068;
+      --body-text:   #3a3530;
+      --white:       #fdfaf5;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-ui:      'DM Sans', system-ui, sans-serif;
+
+      --t-speed: 480ms;
+      --t-ease:  cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Reset ───────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; }
-    body { font-family: 'DM Sans', sans-serif; background: #fafaf9; color: #1c1917; -webkit-font-smoothing: antialiased; }
 
-    /* ── Nav ──────────────────────────────────────────────── */
-    #nav { transition: background .3s, box-shadow .3s; }
-    #nav.scrolled { background: rgba(250,250,249,0.92); backdrop-filter: blur(16px); box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
-
-    /* ── Section fade-in on scroll ───────────────────────── */
-    /* reveal — content always visible; animation is progressive enhancement */
-    .reveal { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
-    .reveal-delay-1 { }
-    .reveal-delay-2 { }
-    .reveal-delay-3 { }
-    .reveal-delay-4 { }
-
-    /* ── Typography ───────────────────────────────────────── */
-    .display { font-family: 'DM Serif Display', serif; }
-    .display-italic { font-family: 'DM Serif Display', serif; font-style: italic; }
-
-    /* ── Tab system ───────────────────────────────────────── */
-    .tab-btn { transition: color .2s, border-color .2s; }
-    .tab-btn.active { color: #1c1917; border-bottom-color: #1c1917; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* ── Project cards ────────────────────────────────────── */
-    .project-card { transition: transform .25s ease, box-shadow .25s ease; }
-    .project-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.09); }
-
-    /* ── Art gallery ──────────────────────────────────────── */
-    .art-item { overflow: hidden; cursor: zoom-in; }
-    .art-item img { transition: transform .5s ease; }
-    .art-item:hover img { transform: scale(1.04); }
-
-    /* ── Lightbox ─────────────────────────────────────────── */
-    #lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; }
-    #lightbox.open { display: flex; }
-    #lightbox img { max-width: 90vw; max-height: 88vh; object-fit: contain; border-radius: 4px; }
-
-    /* ── Subtle divider ───────────────────────────────────── */
-    .section-line { width: 40px; height: 1px; background: #a8a29e; display: block; }
-
-    /* ── Tag pills ────────────────────────────────────────── */
-    .tag { display: inline-block; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; border: 1px solid #d6d3d1; color: #78716c; font-weight: 500; }
-
-    /* ── Smooth section transitions ───────────────────────── */
-    section { padding-top: 96px; padding-bottom: 96px; }
-
-    /* ── Hover link underline ─────────────────────────────── */
-    .link-under { position: relative; }
-    .link-under::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: currentColor; transition: width .25s ease; }
-    .link-under:hover::after { width: 100%; }
-
-    /* ── Hero gradient text ───────────────────────────────── */
-    .gradient-name {
-      background: linear-gradient(135deg, #1c1917 0%, #57534e 50%, #1c1917 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    body {
+      font-family: var(--font-ui);
+      /* Warm multi-stop radial gradient — lightest at centre, deepens at edges */
+      background:
+        radial-gradient(ellipse 120% 100% at 50% 40%,
+          #f5ede0 0%,
+          #ede4d3 35%,
+          #e0d5c0 65%,
+          #cfc7ae 100%);
+      color: var(--ink);
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
     }
 
-    /* ── Mobile nav ───────────────────────────────────────── */
-    #mobile-menu { transition: opacity .2s, transform .2s; }
+    /* Vignette — darkens corners to add depth and focus the eye inward */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 90% 90% at 50% 50%,
+        transparent 45%,
+        rgba(30, 24, 18, 0.18) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Paper-grain texture — inline SVG, no HTTP request */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ── Scene Layout ────────────────────────────────────────────── */
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition:
+        opacity   var(--t-speed) var(--t-ease),
+        transform var(--t-speed) var(--t-ease);
+    }
+
+    .scene.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .scene.exit {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .scene-inner {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    /* ── Title Screen ─────────────────────────────────────────────── */
+    #scene-title {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    #scene-title .scene-inner { gap: 1.25rem; }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 8vw, 4.2rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--white);
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold-light);
+    }
+
+    .title-subtitle {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(253, 250, 245, 0.65);
+    }
+
+    .title-context {
+      font-size: 0.82rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(253, 250, 245, 0.45);
+      max-width: 380px;
+      font-style: italic;
+    }
+
+    .title-context-link {
+      color: rgba(253, 250, 245, 0.55);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(184, 150, 106, 0.35);
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .title-context-link:hover {
+      color: var(--gold-light);
+      border-bottom-color: var(--gold-light);
+    }
+
+    .title-byline {
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: rgba(253, 250, 245, 0.35);
+      margin-top: 0.25rem;
+    }
+
+    .deco-line {
+      position: absolute;
+      top: 0; right: 10vw;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    /* ── Content Screens ──────────────────────────────────────────── */
+    #scene-intro,
+    #scene-choice,
+    #scene-legend,
+    #scene-ritual,
+    #scene-close {
+      /* Slightly transparent so the gradient background breathes through */
+      background: transparent;
+    }
+
+    /* The inner card sits on a soft translucent surface */
+    #scene-intro .scene-inner,
+    #scene-choice .scene-inner,
+    #scene-legend .scene-inner,
+    #scene-ritual .scene-inner,
+    #scene-close .scene-inner {
+      background: rgba(253, 250, 245, 0.82);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      padding: 2.5rem 2.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 2px 32px rgba(30, 24, 18, 0.07);
+    }
+
+    /* ── Scene Glyph ──────────────────────────────────────────────
+       Large centered symbol at top of each content scene.
+       Faded so it adds atmosphere without competing with text.
+       To change: edit the character inside .scene-glyph in HTML.
+    ──────────────────────────────────────────────────────────────── */
+    .scene-glyph {
+      text-align: center;
+      font-size: 2.8rem;
+      line-height: 1;
+      opacity: 0.22;
+      /* No color override — emoji render naturally at low opacity */
+      user-select: none;
+      margin-bottom: -0.25rem; /* tighten gap to content below */
+    }
+
+    /* ── Progress: Dot Indicator ─────────────────────────────────
+       Rendered via JS from data-step / data-total attributes.
+       ● filled dot = completed or current step
+       ○ hollow dot = upcoming step
+    ──────────────────────────────────────────────────────────────── */
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .progress-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .progress-dots .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--paper-mid);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .progress-dots .dot.filled {
+      background: var(--gold);
+      transform: scale(1.1);
+    }
+
+    /* ── Location Tag ─────────────────────────────────────────────── */
+    .location {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── Headings ─────────────────────────────────────────────────── */
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.9rem, 6vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    /* ── Narrative Text + Sentence Fade-in ───────────────────────
+       Each sentence is wrapped in <span class="s"> in the HTML.
+       When the parent scene gets .active, sentences fade in with
+       staggered delays via the nth-child selectors below.
+       Delays are short and uniform — calm, not theatrical.
+    ──────────────────────────────────────────────────────────────── */
+    .scene-text {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--body-text);
+    }
+
+    /* Each sentence starts invisible */
+    .scene-text .s {
+      opacity: 0;
+      display: inline;
+      transition: opacity 0.5s ease;
+    }
+
+    /* When the scene becomes active, fade sentences in sequentially */
+    .scene.active .scene-text .s:nth-child(1) { opacity: 1; transition-delay: 0.15s; }
+    .scene.active .scene-text .s:nth-child(2) { opacity: 1; transition-delay: 0.45s; }
+    .scene.active .scene-text .s:nth-child(3) { opacity: 1; transition-delay: 0.75s; }
+    .scene.active .scene-text .s:nth-child(4) { opacity: 1; transition-delay: 1.0s;  }
+
+    /* Reset sentence opacity when scene is no longer active */
+    .scene:not(.active) .scene-text .s { opacity: 0; transition: none; }
+
+    /* ── Buttons ──────────────────────────────────────────────────── */
+    .btn-primary,
+    .btn-secondary {
+      display: inline-block;
+      width: fit-content;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition:
+        background   0.2s ease,
+        color        0.2s ease,
+        border-color 0.2s ease,
+        transform    0.2s ease,
+        box-shadow   0.2s ease;
+    }
+
+    .btn-primary:disabled,
+    .btn-secondary:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .btn-primary {
+      padding: 0.75rem 2rem;
+      background: var(--ink);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #2e2922;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 23, 20, 0.2);
+    }
+
+    .btn-primary:hover:not(:disabled)::after { width: 100%; }
+    .btn-primary:active:not(:disabled) { transform: translateY(0); }
+
+    .btn-secondary {
+      padding: 0.7rem 1.8rem;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--paper-mid);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      border-color: var(--gold-light);
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    /* ── Choice Cards ─────────────────────────────────────────────
+       Increased padding and gap for more breathing room.
+       Hover: subtle lift + warm background + left accent bar.
+    ──────────────────────────────────────────────────────────────── */
+    .choice-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.1rem;
+      padding: 1.35rem 1.5rem;           /* more generous than before */
+      border: 1px solid var(--paper-mid);
+      background: var(--paper-light);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition:
+        border-color 0.22s ease,
+        background   0.22s ease,
+        transform    0.22s ease,
+        box-shadow   0.22s ease;
+    }
+
+    .choice-card.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    /* Left gold accent bar */
+    .choice-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--gold);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.22s ease;
+    }
+
+    .choice-card:hover {
+      border-color: var(--gold-light);
+      background: #faf6ed;              /* warm paper tint on hover */
+      transform: translateY(-2px) translateX(2px);
+      box-shadow: 0 4px 16px rgba(184, 150, 106, 0.12);
+    }
+
+    .choice-card:hover::before { transform: scaleY(1); }
+    .choice-card:active { transform: translateY(0) translateX(1px); }
+
+    .choice-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+      opacity: 0.75;
+    }
+
+    .choice-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;                       /* slightly more gap than before */
+    }
+
+    .choice-text strong {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .choice-text span {
+      font-size: 0.83rem;
+      font-weight: 300;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    /* ── Discovery Badge ──────────────────────────────────────────── */
+    .discovery-badge {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      background: var(--paper-mid);
+      border-left: 3px solid var(--gold);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .discovery-badge.visible { opacity: 1; }
+
+    /* ── Closing Screen ───────────────────────────────────────────── */
+    .closing-heading {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .closing-text {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .divider { border: none; border-top: 1px solid var(--paper-mid); }
+
+    /* Closing scene: centred layout with generous vertical breathing room */
+    #scene-close .scene-inner {
+      text-align: center;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    /* Each line of the closing quote reveals independently */
+    .closing-line {
+      display: block;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .scene.active .closing-line:nth-child(1) {
+      opacity: 1; transform: translateY(0);
+      transition-delay: 0.2s;
+    }
+    .scene.active .closing-line:nth-child(2) {
+      opacity: 1; transform: translateY(0);
+      transition-delay: 0.7s;
+    }
+
+    /* Separator above the quote — fades in with the second line */
+    .closing-rule {
+      width: 2.5rem;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      transition-delay: 1.1s;
+      border: none;
+      margin: 0 auto;
+    }
+
+    .scene.active .closing-rule { opacity: 0.5; }
+
+    /* Sub-text beneath the quote */
+    .closing-sub {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.8;
+      font-style: italic;
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      transition-delay: 1.3s;
+    }
+
+    .scene.active .closing-sub { opacity: 1; }
+
+    /* Reset on leave */
+    .scene:not(.active) .closing-line,
+    .scene:not(.active) .closing-rule,
+    .scene:not(.active) .closing-sub {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: none;
+    }
+
+    #scene-close .design-notes { text-align: left; }
+    #scene-close .divider      { width: 100%; }
+
+    /* ── Design Notes ─────────────────────────────────────────────── */
+    .design-notes {
+      padding: 1.2rem 1.4rem;
+      background: var(--paper);
+      border: 1px solid var(--paper-mid);
+    }
+
+    .design-notes h3 {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .design-notes ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .design-notes li {
+      font-size: 0.82rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: #5a534a;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .design-notes li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    .design-notes li strong { font-weight: 500; color: var(--ink); }
+
+    /* ── Mobile ───────────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .scene {
+        align-items: flex-start;
+        padding: 2.5rem 1.25rem 2rem;
+      }
+      h1          { font-size: 2.2rem; }
+      h2          { font-size: 2rem; }
+      .scene-text { font-size: 0.97rem; }
+      .deco-line  { display: none; }
+      .scene-glyph { font-size: 2.2rem; }
+    }
   </style>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"DM Serif Display"', 'Georgia', 'serif'],
-            sans:  ['"DM Sans"', 'system-ui', 'sans-serif'],
-          },
-        },
-      },
-    }
-  </script>
 </head>
 
-<body class="bg-stone-50 text-stone-900">
+<body>
 
-<!-- ══════════════════════════════════════════════
-     NAV
-══════════════════════════════════════════════ -->
-<nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-4">
-  <div class="max-w-6xl mx-auto flex items-center justify-between">
-    <!-- Logo -->
-    <a href="#home" class="display text-lg tracking-tight text-stone-900 hover:text-stone-600 transition-colors">AW</a>
+  <!-- ================================================================
+       SCENES
+       One <section class="scene"> per screen.
+       Only the .active one is shown — JS handles all transitions.
 
-    <!-- Desktop nav -->
-    <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-500">
-      <li><a href="#projects"    class="link-under hover:text-stone-900 transition-colors">Projects</a></li>
-      <li><a href="#experiments" class="link-under hover:text-stone-900 transition-colors">Experiments</a></li>
-      <li><a href="#art"         class="link-under hover:text-stone-900 transition-colors">Art</a></li>
-      <li><a href="#performance" class="link-under hover:text-stone-900 transition-colors">Performance</a></li>
-      <li><a href="#community"   class="link-under hover:text-stone-900 transition-colors">Community</a></li>
-      <li><a href="#learning"    class="link-under hover:text-stone-900 transition-colors">Learning</a></li>
-      <li><a href="#about"       class="link-under hover:text-stone-900 transition-colors">About</a></li>
-      <li>
-        <a href="#contact" class="text-stone-900 border border-stone-300 rounded-full px-4 py-1.5 hover:bg-stone-900 hover:text-white hover:border-stone-900 transition-all duration-200 text-xs tracking-wide">Contact</a>
-      </li>
-    </ul>
+       NAVIGATION MAP:
+         scene-title  →  scene-intro  →  scene-choice
+                                              ├─ scene-legend  →  scene-close
+                                              └─ scene-ritual  →  scene-close
+                                                                       ↓
+                                                                  (restart)
 
-    <!-- Mobile hamburger -->
-    <button id="menu-btn" class="md:hidden text-stone-600 hover:text-stone-900" aria-label="Menu">
-      <svg id="icon-open"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      <svg id="icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-  </div>
-
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-stone-50/95 backdrop-blur-md border-b border-stone-200 px-6 py-6">
-    <ul class="flex flex-col gap-5 text-sm font-medium text-stone-600">
-      <li><a href="#projects"    class="hover:text-stone-900" onclick="closeMobile()">Projects</a></li>
-      <li><a href="#experiments" class="hover:text-stone-900" onclick="closeMobile()">Experiments</a></li>
-      <li><a href="#art"         class="hover:text-stone-900" onclick="closeMobile()">Art</a></li>
-      <li><a href="#performance" class="hover:text-stone-900" onclick="closeMobile()">Performance</a></li>
-      <li><a href="#community"   class="hover:text-stone-900" onclick="closeMobile()">Community</a></li>
-      <li><a href="#learning"    class="hover:text-stone-900" onclick="closeMobile()">Learning</a></li>
-      <li><a href="#about"       class="hover:text-stone-900" onclick="closeMobile()">About</a></li>
-      <li><a href="#contact"     class="hover:text-stone-900" onclick="closeMobile()">Contact</a></li>
-    </ul>
-  </div>
-</nav>
+       SENTENCE FADE-IN:
+         Wrap each sentence in <span class="s">...</span> (with a
+         trailing space). CSS handles the staggered opacity transitions.
+         Max 4 sentences per scene supported by default.
+  ================================================================ -->
 
 
-<!-- ══════════════════════════════════════════════
-     HERO
-══════════════════════════════════════════════ -->
-<section id="home" class="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-24 pb-16">
-  <div class="max-w-6xl mx-auto w-full">
-    <div class="max-w-3xl">
+  <!-- ── TITLE ──────────────────────────────────────────────────────
+       No glyph on title screen — dark bg is its own visual anchor.
+       Edit: h1, .title-subtitle, button label, .title-byline
+  ──────────────────────────────────────────────────────────────────── -->
+  <section id="scene-title" class="scene active">
+    <div class="scene-inner">
+      <h1>Historical Place Stories<br><em>Interactive Prototype</em></h1>
+      <p class="title-subtitle">
+        What if places could tell their stories when you're standing inside them?
+      </p>
+      <p class="title-context">
+        A design prototype by Angela W — taking the
+        <a href="../index.html" class="title-context-link">Historical Place Stories comic</a>
+        one step further, exploring what place-based storytelling could feel like as a short interactive experience.
+      </p>
+      <button class="btn-primary" onclick="goTo('scene-intro')">Begin Experience</button>
+      <span class="title-byline">by Angela W &nbsp;·&nbsp; companion to the comic</span>
+    </div>
+    <div class="deco-line" aria-hidden="true"></div>
+  </section>
 
-      <!-- Eyebrow -->
-      <p class="text-xs font-medium tracking-[.18em] text-stone-400 uppercase mb-8 reveal">
-        San Jose, CA &nbsp;·&nbsp; Archbishop Mitty High School &nbsp;·&nbsp; Class of 2028
+
+  <!-- ── STEP 1 OF 3: INTRO ─────────────────────────────────────────
+       Glyph: ⛩  (Shinto shrine gate — Kaminarimon / temple entrance)
+       Edit: .scene-glyph character, .location, h2, .scene-text sentences
+  ──────────────────────────────────────────────────────────────────── -->
+  <section id="scene-intro" class="scene">
+    <div class="scene-inner">
+
+      <div class="progress" data-step="1" data-total="3">
+        <span class="progress-label">Story 1 of 3</span>
+        <div class="progress-dots"></div>
+      </div>
+
+      <div class="scene-glyph" aria-hidden="true">⛩</div>
+
+      <span class="location">東京 · Asakusa, Tokyo</span>
+      <h2>The Gate at Dusk</h2>
+
+      <p class="scene-text">
+        <span class="s">The smell of incense reaches you before anything else — thick, sweet, older than the street noise behind you. </span>
+        <span class="s">You have been here before, in photographs. But standing under Kaminarimon, you realize you never knew what it felt like. </span>
+        <span class="s">A bell tolls once. Somewhere ahead, people move in quiet ritual, and you've forgotten everything the guidebook said.</span>
       </p>
 
-      <!-- Name -->
-      <h1 class="display text-[clamp(52px,9vw,108px)] leading-[.95] tracking-tight text-stone-900 mb-6 reveal reveal-delay-1">
-        Angela<br/>
-        <span class="display-italic text-stone-400">Wan</span>
-      </h1>
+      <button class="btn-primary" onclick="goTo('scene-choice')">Step Inside →</button>
 
-      <!-- Tagline -->
-      <p class="text-xl md:text-2xl font-light text-stone-500 tracking-wide mb-8 reveal reveal-delay-2">
-        Artist &nbsp;·&nbsp; Designer &nbsp;·&nbsp; Creative Technologist &nbsp;·&nbsp; Builder
+    </div>
+  </section>
+
+
+  <!-- ── STEP 2 OF 3: CHOICE ────────────────────────────────────────
+       Glyph: ✦  (neutral star/compass — moment of decision)
+       Each .choice-card calls goToChoice(targetId, discoveryLabel).
+       To add a third option: copy a .choice-card and add a scene below.
+  ──────────────────────────────────────────────────────────────────── -->
+  <section id="scene-choice" class="scene">
+    <div class="scene-inner">
+
+      <div class="progress" data-step="2" data-total="3">
+        <span class="progress-label">Story 2 of 3</span>
+        <div class="progress-dots"></div>
+      </div>
+
+      <div class="scene-glyph" aria-hidden="true">✦</div>
+
+      <span class="location">A moment of attention</span>
+      <h2>What draws you?</h2>
+
+      <!-- Choice A → scene-legend -->
+      <div class="choice-card"
+           role="button" tabindex="0"
+           onclick="goToChoice('scene-legend', 'The Legend of Senso-ji')"
+           onkeydown="if(event.key==='Enter'||event.key===' ')goToChoice('scene-legend','The Legend of Senso-ji')">
+        <div class="choice-icon" aria-hidden="true">⛩</div>
+        <div class="choice-text">
+          <strong>Explore the legend behind the temple</strong>
+          <span>Trace the story of two fishermen, a golden statue, and 1,400 years of devotion</span>
+        </div>
+      </div>
+
+      <!-- Choice B → scene-ritual -->
+      <div class="choice-card"
+           role="button" tabindex="0"
+           onclick="goToChoice('scene-ritual', 'Ritual in the Smoke')"
+           onkeydown="if(event.key==='Enter'||event.key===' ')goToChoice('scene-ritual','Ritual in the Smoke')">
+        <div class="choice-icon" aria-hidden="true">🕯</div>
+        <div class="choice-text">
+          <strong>Observe the people and their rituals</strong>
+          <span>Watch what hands do when they are reaching for something they cannot name</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── STEP 3 OF 3: BRANCH A — LEGEND ────────────────────────────
+       Glyph: 🌊  (river / the statue drawn from water)
+       Edit: .scene-glyph, .location, h2, .scene-text sentences
+  ──────────────────────────────────────────────────────────────────── -->
+  <section id="scene-legend" class="scene">
+    <div class="scene-inner">
+
+      <div class="progress" data-step="3" data-total="3">
+        <span class="progress-label">Story 3 of 3</span>
+        <div class="progress-dots"></div>
+      </div>
+
+      <div class="discovery-badge" aria-live="polite"></div>
+
+      <div class="scene-glyph" aria-hidden="true">🌊</div>
+
+      <span class="location">628 AD · Sumida River</span>
+      <h2>Pulled from the River</h2>
+
+      <p class="scene-text">
+        <span class="s">Two brothers cast their nets and drew up a small golden figure — the Bodhisattva Kannon, barely the size of a palm. </span>
+        <span class="s">They returned her to the water. She returned to their nets. Three times. They understood. </span>
+        <span class="s">The temple you're standing in was built around that refusal to be ignored — and it has never stopped collecting pilgrims since.</span>
       </p>
 
-      <!-- Description -->
-      <p class="text-base md:text-lg font-light text-stone-600 leading-relaxed max-w-2xl mb-10 reveal reveal-delay-3">
-        I explore the space where art, design, and technology meet. My work spans visual storytelling, interaction design, and AI-assisted prototyping — with a growing curiosity about product management, human-computer interaction, and game design. I'm especially interested in how creative tools and emerging technologies shape the way people experience, learn, and connect.
+      <button class="btn-primary" onclick="goTo('scene-close')">Reflect →</button>
+
+    </div>
+  </section>
+
+
+  <!-- ── STEP 3 OF 3: BRANCH B — RITUAL ────────────────────────────
+       Glyph: 🕯  (candle / incense / ritual)
+       Edit: .scene-glyph, .location, h2, .scene-text sentences
+  ──────────────────────────────────────────────────────────────────── -->
+  <section id="scene-ritual" class="scene">
+    <div class="scene-inner">
+
+      <div class="progress" data-step="3" data-total="3">
+        <span class="progress-label">Story 3 of 3</span>
+        <div class="progress-dots"></div>
+      </div>
+
+      <div class="discovery-badge" aria-live="polite"></div>
+
+      <div class="scene-glyph" aria-hidden="true">🕯</div>
+
+      <span class="location">Now · The Incense Urn</span>
+      <h2>Hands in the Smoke</h2>
+
+      <p class="scene-text">
+        <span class="s">An elderly woman draws smoke toward her face with cupped hands — unhurried, practiced, as if washing. </span>
+        <span class="s">A child beside her copies the gesture, uncertain but earnest. Neither speaks. </span>
+        <span class="s">The ritual doesn't need explanation. You already know, standing there, that you want to remember this moment.</span>
       </p>
 
-      <!-- CTA row -->
-      <div class="flex flex-wrap gap-4 items-center reveal reveal-delay-4">
-        <a href="#projects" class="bg-stone-900 text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-stone-700 transition-colors duration-200">
-          View Projects
-        </a>
-        <a href="#art" class="text-stone-600 text-sm font-medium px-6 py-3 rounded-full border border-stone-300 hover:border-stone-600 hover:text-stone-900 transition-all duration-200">
-          See Artwork
-        </a>
-        <a href="#contact" class="text-stone-400 text-sm font-medium hover:text-stone-800 transition-colors duration-200 link-under">
-          Get in touch →
-        </a>
-      </div>
+      <button class="btn-primary" onclick="goTo('scene-close')">Reflect →</button>
 
     </div>
-
-  </div>
-</section>
+  </section>
 
 
-<!-- ══════════════════════════════════════════════
-     PROJECTS
-══════════════════════════════════════════════ -->
-<section id="projects" class="px-6 md:px-12 bg-white">
-  <div class="max-w-6xl mx-auto">
+  <!-- ── CLOSING: REFLECTION + DESIGN NOTES ─────────────────────────
+       Glyph: ◯  (empty circle — open, reflective)
+       Edit: .scene-glyph, h2, .closing-text, each <li>
+       Remove .design-notes entirely if deploying for end-users only.
+  ──────────────────────────────────────────────────────────────────── -->
+  <section id="scene-close" class="scene">
+    <div class="scene-inner">
 
-    <div class="mb-16 reveal">
-      <span class="section-line mb-6"></span>
-      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Projects</h2>
-      <p class="text-stone-500 font-light max-w-xl">Explorations in storytelling, design, and emerging technology.</p>
-    </div>
+      <div class="scene-glyph" aria-hidden="true">◯</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <span class="location">End of Experience</span>
 
-      <!-- Card 1 — Historical Place Stories: Comic -->
-      <a href="projects/historical-place-stories/index.html"
-         class="project-card reveal group block rounded-2xl overflow-hidden border border-stone-100 bg-stone-50 hover:border-stone-200">
-        <div class="aspect-[4/3] relative overflow-hidden" style="background:#1c0f05;">
-          <div class="absolute inset-0 flex flex-col">
-            <div class="flex-shrink-0 h-10 flex items-center justify-center" style="background:#1c0f05;">
-              <p class="text-xs font-medium tracking-widest uppercase" style="color:#f2c043;font-family:serif;letter-spacing:.2em;">Lost in Time</p>
-            </div>
-            <div class="flex-1 grid grid-cols-2 gap-1 p-1" style="background:#2a1a08;">
-              <div class="rounded overflow-hidden" style="background:#fdf8ec;">
-                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
-                  <rect width="80" height="60" fill="#fdf8ec"/>
-                  <rect x="25" y="35" width="30" height="20" fill="#c93030" opacity=".7"/>
-                  <polygon points="20,35 40,15 60,35" fill="#c93030" opacity=".8"/>
-                  <polygon points="15,35 40,10 65,35" fill="#8b1a1a" opacity=".5"/>
-                  <rect x="33" y="42" width="14" height="13" fill="#1c1209" opacity=".6"/>
-                  <line x1="5" y1="50" x2="75" y2="50" stroke="#d6cfc0" stroke-width="1"/>
-                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
-                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">1</text>
-                </svg>
-              </div>
-              <div class="rounded overflow-hidden" style="background:#fdf8ec;">
-                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
-                  <rect width="80" height="60" fill="#fdf8ec"/>
-                  <ellipse cx="50" cy="20" rx="22" ry="13" fill="white" stroke="#1c1209" stroke-width="1.5"/>
-                  <text x="50" y="17" text-anchor="middle" font-size="6" fill="#1c1209">why can't I</text>
-                  <text x="50" y="25" text-anchor="middle" font-size="6" fill="#1c1209">remember?</text>
-                  <polygon points="38,30 32,38 44,33" fill="white" stroke="#1c1209" stroke-width="1"/>
-                  <circle cx="25" cy="40" r="12" fill="#f4d0a0" stroke="#1c1209" stroke-width="1.5"/>
-                  <circle cx="21" cy="38" r="1.5" fill="#1c1209"/>
-                  <circle cx="29" cy="38" r="1.5" fill="#1c1209"/>
-                  <path d="M21 44 Q25 41 29 44" stroke="#1c1209" stroke-width="1" fill="none"/>
-                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
-                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">2</text>
-                </svg>
-              </div>
-              <div class="rounded overflow-hidden" style="background:#fdf8ec;">
-                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
-                  <rect width="80" height="60" fill="#fdf8ec"/>
-                  <ellipse cx="32" cy="32" rx="14" ry="10" fill="none" stroke="#3a6e9a" stroke-width="2"/>
-                  <ellipse cx="56" cy="32" rx="14" ry="10" fill="none" stroke="#3a6e9a" stroke-width="2"/>
-                  <line x1="46" y1="32" x2="42" y2="32" stroke="#3a6e9a" stroke-width="2"/>
-                  <line x1="18" y1="32" x2="12" y2="30" stroke="#3a6e9a" stroke-width="2"/>
-                  <line x1="70" y1="32" x2="76" y2="30" stroke="#3a6e9a" stroke-width="2"/>
-                  <circle cx="32" cy="32" r="3" fill="#f2c043" opacity=".8"/>
-                  <circle cx="56" cy="32" r="3" fill="#f2c043" opacity=".8"/>
-                  <text x="40" y="52" text-anchor="middle" font-size="6" fill="#3a6e9a" font-style="italic">StoryLens</text>
-                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
-                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">5</text>
-                </svg>
-              </div>
-              <div class="rounded overflow-hidden" style="background:#1a1a2e;">
-                <svg viewBox="0 0 80 60" class="w-full h-full" fill="none">
-                  <rect width="80" height="60" fill="#1a1a2e"/>
-                  <rect x="28" y="30" width="24" height="25" fill="#c93030" opacity=".5"/>
-                  <polygon points="22,30 40,14 58,30" fill="#c93030" opacity=".6"/>
-                  <circle cx="15" cy="10" r="1" fill="white" opacity=".8"/>
-                  <circle cx="65" cy="8" r="1" fill="white" opacity=".8"/>
-                  <circle cx="45" cy="5" r="1.5" fill="white" opacity=".9"/>
-                  <ellipse cx="40" cy="25" rx="18" ry="8" fill="#3a6e9a" opacity=".2"/>
-                  <text x="40" y="27" text-anchor="middle" font-size="5" fill="#f2c043" opacity=".9">● story loading...</text>
-                  <rect x="2" y="2" width="12" height="12" rx="2" fill="#f2c043"/>
-                  <text x="8" y="11" text-anchor="middle" font-size="7" font-weight="bold" fill="#1c1209">10</text>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <span class="tag relative z-10 absolute bottom-3 left-3" style="background:rgba(28,15,5,0.7);border-color:#f2c043;color:#f2c043;">Comic · Design · Travel</span>
-        </div>
-        <div class="p-6">
-          <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">Historical Place Stories — Comic</h3>
-          <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">A 10-panel comic following Kai, a curious traveler who can't remember the stories behind the places she visits — and starts imagining a better way.</p>
-          <span class="text-xs text-stone-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-            Read the comic
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-        </div>
-      </a>
+      <!-- Closing quote: two lines reveal independently via .closing-line -->
+      <h2 class="closing-heading" style="display:flex; flex-direction:column; gap:0.3rem; align-items:center;">
+        <span class="closing-line">Stories don't leave</span>
+        <span class="closing-line">unless we carry them out.</span>
+      </h2>
 
-      <!-- Card 2 — Historical Place Stories: Interactive Narrative Prototype -->
-      <a href="projects/historical-place-stories/InteractiveNarrativePrototype/index.html"
-         class="project-card reveal reveal-delay-1 group block rounded-2xl overflow-hidden border border-stone-100 bg-stone-50 hover:border-stone-200">
-        <div class="aspect-[4/3] relative overflow-hidden">
-          <!-- Split thumbnail: dark ink left / warm parchment right -->
-          <svg viewBox="0 0 400 300" class="absolute inset-0 w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Left half — dark ink (title screen) -->
-            <rect width="200" height="300" fill="#1a1714"/>
-            <!-- Subtle radial warmth on dark side -->
-            <radialGradient id="gd" cx="50%" cy="50%" r="70%">
-              <stop offset="0%" stop-color="#2e2318" stop-opacity="1"/>
-              <stop offset="100%" stop-color="#1a1714" stop-opacity="1"/>
-            </radialGradient>
-            <rect width="200" height="300" fill="url(#gd)"/>
-            <!-- Title lines on dark side -->
-            <text x="24" y="110" font-size="11" fill="#fdfaf5" opacity=".9" font-family="Georgia,serif" font-weight="300">Historical</text>
-            <text x="24" y="128" font-size="11" fill="#fdfaf5" opacity=".9" font-family="Georgia,serif" font-weight="300">Place Stories</text>
-            <text x="24" y="148" font-size="9" fill="#d4b896" opacity=".8" font-family="Georgia,serif" font-style="italic">Interactive Prototype</text>
-            <!-- Gold accent line -->
-            <line x1="24" y1="162" x2="90" y2="162" stroke="#b8966a" stroke-width="1" opacity=".5"/>
-            <!-- Begin button suggestion -->
-            <rect x="24" y="174" width="80" height="18" rx="1" fill="#fdfaf5" opacity=".08"/>
-            <text x="64" y="186" text-anchor="middle" font-size="7" fill="#fdfaf5" opacity=".5" font-family="sans-serif" letter-spacing="1">BEGIN</text>
-            <!-- Deco vertical line -->
-            <line x1="178" y1="30" x2="178" y2="270" stroke="#b8966a" stroke-width="1" opacity=".15"/>
-            <!-- Right half — warm parchment (content screen) -->
-            <rect x="200" width="200" height="300" fill="#f5ede0"/>
-            <!-- Vignette on warm side -->
-            <radialGradient id="gw" cx="50%" cy="50%" r="80%">
-              <stop offset="40%" stop-color="#f5ede0" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#cfc7ae" stop-opacity="0.35"/>
-            </radialGradient>
-            <rect x="200" width="200" height="300" fill="url(#gw)"/>
-            <!-- Scene glyph — temple gate -->
-            <text x="300" y="105" text-anchor="middle" font-size="28" opacity=".22">⛩</text>
-            <!-- Location tag -->
-            <text x="228" y="140" font-size="7" fill="#b8966a" font-family="sans-serif" letter-spacing="1.5" opacity=".9">ASAKUSA · TOKYO</text>
-            <!-- Scene heading lines -->
-            <text x="228" y="160" font-size="12" fill="#1a1714" font-family="Georgia,serif" font-weight="400" opacity=".85">The Gate</text>
-            <text x="228" y="177" font-size="12" fill="#1a1714" font-family="Georgia,serif" font-weight="400" opacity=".85">at Dusk</text>
-            <!-- Dot progress -->
-            <circle cx="228" cy="198" r="4" fill="#b8966a"/>
-            <circle cx="242" cy="198" r="4" fill="#b8966a"/>
-            <circle cx="256" cy="198" r="4" fill="#ede7d9"/>
-            <!-- Sentence lines suggestion -->
-            <rect x="228" y="212" width="120" height="2" rx="1" fill="#3a3530" opacity=".15"/>
-            <rect x="228" y="220" width="100" height="2" rx="1" fill="#3a3530" opacity=".12"/>
-            <rect x="228" y="228" width="110" height="2" rx="1" fill="#3a3530" opacity=".09"/>
-          </svg>
-          <span class="tag relative z-10 absolute bottom-3 left-3" style="background:rgba(26,23,20,0.75);border-color:#b8966a;color:#b8966a;">Narrative · Interaction · Design</span>
-        </div>
-        <div class="p-6">
-          <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">Historical Place Stories — Prototype</h3>
-          <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">An interactive web narrative set at Senso-ji Temple — short scenes, player choices, and sequential reveals that show how place-based storytelling could feel in practice.</p>
-          <span class="text-xs text-stone-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-            Try the prototype
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-        </div>
-      </a>
+      <hr class="closing-rule" aria-hidden="true" />
 
-      <!-- Card 3 — Endometriosis Awareness -->
-      <a href="projects/endometriosis/index.html"
-         class="project-card reveal reveal-delay-2 group block rounded-2xl overflow-hidden border border-stone-100 bg-stone-50 hover:border-stone-200">
-        <div class="aspect-[4/3] bg-gradient-to-br from-rose-50 to-pink-50 flex items-end p-6 relative overflow-hidden">
-          <div class="absolute inset-0 flex items-center justify-center opacity-10">
-            <svg width="120" height="100" viewBox="0 0 120 100" fill="none">
-              <path d="M60 10 C30 10 10 35 10 55 C10 75 30 90 60 90 C90 90 110 75 110 55 C110 35 90 10 60 10Z" stroke="#be123c" stroke-width="1.5"/>
-              <path d="M40 55 Q60 35 80 55" stroke="#be123c" stroke-width="1.5"/>
-            </svg>
-          </div>
-          <span class="tag relative z-10 border-rose-200 text-rose-400">Health · Awareness · Design</span>
-        </div>
-        <div class="p-6">
-          <h3 class="font-medium text-stone-900 mb-2 group-hover:text-stone-600 transition-colors">Endometriosis Awareness</h3>
-          <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">Raising awareness about an underdiagnosed condition in teen girls — exploring menstrual pain, delayed diagnosis, and mental and social impacts through visual storytelling.</p>
-          <span class="text-xs text-stone-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-            View project
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-        </div>
-      </a>
+      <p class="closing-sub">
+        Most of us walk through extraordinary places and forget them by dinner.<br>
+        But a story — short, felt, chosen — stays in the body longer than a photo does.
+      </p>
+
+      <hr class="divider" />
+
+      <div class="design-notes">
+        <h3>Design Notes</h3>
+        <ul>
+          <li><strong>Short segments</strong> — Each scene is under 3 sentences. Constraint forces precision; readers don't skim what's already brief.</li>
+          <li><strong>Choices create investment</strong> — Deciding between paths makes the story feel personal, not broadcast. You chose this version.</li>
+          <li><strong>Context anchors memory</strong> — When you read "Sumida River, 628 AD" while standing near Senso-ji, it becomes a real coordinate, not trivia.</li>
+          <li><strong>Guided freedom tradeoff</strong> — One fork keeps scope tight while preserving a sense of agency. More branches = more richness, more maintenance.</li>
+        </ul>
+      </div>
+
+      <button class="btn-secondary" onclick="restart()">Start Over</button>
 
     </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     EXPERIMENTS
-══════════════════════════════════════════════ -->
-<section id="experiments" class="px-6 md:px-12 bg-white">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="mb-12 reveal">
-      <span class="section-line mb-6"></span>
-      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Experiments</h2>
-      <p class="text-stone-500 font-light max-w-xl">Small creative explorations in storytelling, design, and interaction — one live, more in progress.</p>
-    </div>
-
-    <!-- Horizontal scroll — live card anchors left, upcoming trail right -->
-    <div class="relative reveal">
-      <div class="flex gap-5 overflow-x-auto pb-4 -mx-6 px-6 md:-mx-12 md:px-12 scroll-smooth"
-           id="exp-scroll"
-           style="scrollbar-width: thin; scrollbar-color: #d6d3d1 transparent;">
-
-        <!-- ── LIVE: Story Prompt Generator ── -->
-        <a href="experiments/story-prompt-generator/index.html"
-           class="group flex-shrink-0 w-72 block rounded-2xl border border-stone-100 bg-stone-50 hover:border-stone-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-          <div class="h-44 bg-gradient-to-br from-stone-900 to-stone-700 flex flex-col items-center justify-center gap-3 p-6 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10" style="background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:12px 12px;"></div>
-            <div class="relative z-10 w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
-            </div>
-            <p class="relative z-10 text-white/50 text-xs font-mono tracking-widest uppercase">mood · setting · theme</p>
-            <p class="relative z-10 text-white text-xs font-light italic text-center leading-snug max-w-[160px]">"She opened the letter that had been waiting since before she was born."</p>
-            <span class="relative z-10 text-xs font-medium tracking-widest uppercase px-3 py-1 rounded-full border border-white/20 text-white/70">Live ↗</span>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-medium text-stone-900 group-hover:text-stone-600 transition-colors text-sm">Story Prompt Generator</h3>
-              <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Live
-              </span>
-            </div>
-            <p class="text-xs text-stone-500 font-light leading-relaxed">Pick a mood, setting, and theme — get a story starter. Vibe coding experiment combining creative writing with interaction design.</p>
-          </div>
-        </a>
-
-        <!-- ── UPCOMING: AI-Assisted Design ── -->
-        <div class="flex-shrink-0 w-72 rounded-2xl border border-dashed border-stone-200 bg-stone-50/60 overflow-hidden">
-          <div class="h-44 bg-gradient-to-br from-violet-50 to-indigo-50 flex flex-col items-center justify-center gap-3 p-6">
-            <div class="w-10 h-10 rounded-2xl bg-violet-100 flex items-center justify-center">
-              <svg class="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
-            </div>
-            <p class="text-xs text-stone-400 font-light italic text-center leading-snug max-w-[180px]">What happens when you treat AI as a collaborator, not just a tool?</p>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-medium text-stone-500 text-sm">AI-Assisted Design</h3>
-              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-400 border border-stone-200">Upcoming</span>
-            </div>
-            <p class="text-xs text-stone-400 font-light leading-relaxed">Exploring how AI tools — image generation, code assistants, creative prompting — can extend and reshape creative workflows.</p>
-          </div>
-        </div>
-
-        <!-- ── UPCOMING: Interaction Design Concepts ── -->
-        <div class="flex-shrink-0 w-72 rounded-2xl border border-dashed border-stone-200 bg-stone-50/60 overflow-hidden">
-          <div class="h-44 bg-gradient-to-br from-teal-50 to-cyan-50 flex flex-col items-center justify-center gap-3 p-6">
-            <div class="w-10 h-10 rounded-2xl bg-teal-100 flex items-center justify-center">
-              <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3"/></svg>
-            </div>
-            <p class="text-xs text-stone-400 font-light italic text-center leading-snug max-w-[180px]">Interfaces that surface information without interrupting the experience.</p>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-medium text-stone-500 text-sm">Interaction Design Concepts</h3>
-              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-400 border border-stone-200">Upcoming</span>
-            </div>
-            <p class="text-xs text-stone-400 font-light leading-relaxed">Sketching and prototyping wearables, ambient displays, and context-aware tools — interfaces that feel natural in the moment.</p>
-          </div>
-        </div>
-
-        <!-- ── UPCOMING: StoryLens Smart Glasses ── -->
-        <div class="flex-shrink-0 w-72 rounded-2xl border border-dashed border-stone-200 bg-stone-50/60 overflow-hidden">
-          <div class="h-44 bg-gradient-to-br from-teal-50 to-emerald-50 flex flex-col items-center justify-center gap-3 p-6">
-            <div class="w-10 h-10 rounded-2xl bg-emerald-100 flex items-center justify-center">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            </div>
-            <p class="text-xs text-stone-400 font-light italic text-center leading-snug max-w-[180px]">Arrive at a landmark. A story begins.</p>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-medium text-stone-500 text-sm">StoryLens — Smart Glasses</h3>
-              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-400 border border-stone-200">Upcoming</span>
-            </div>
-            <p class="text-xs text-stone-400 font-light leading-relaxed">Lightweight smart glasses surfacing location-aware historical stories through a HUD overlay and bone-conduction audio. No app, no phone out.</p>
-          </div>
-        </div>
-
-        <!-- ── UPCOMING: Diabetes Patient Education ── -->
-        <div class="flex-shrink-0 w-72 rounded-2xl border border-dashed border-stone-200 bg-stone-50/60 overflow-hidden">
-          <div class="h-44 bg-gradient-to-br from-violet-50 to-purple-50 flex flex-col items-center justify-center gap-3 p-6">
-            <div class="w-10 h-10 rounded-2xl bg-purple-100 flex items-center justify-center">
-              <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
-            </div>
-            <p class="text-xs text-stone-400 font-light italic text-center leading-snug max-w-[180px]">Medical information that people can actually understand and use.</p>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-medium text-stone-500 text-sm">Diabetes Patient Education</h3>
-              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-400 border border-stone-200">Upcoming</span>
-            </div>
-            <p class="text-xs text-stone-400 font-light leading-relaxed">Accessible patient-education design from Georgetown Pre-College — focused on clarity and accessibility in communicating medical information.</p>
-          </div>
-        </div>
-
-        <!-- ── UPCOMING: Neurological Disorders & UX ── -->
-        <div class="flex-shrink-0 w-72 rounded-2xl border border-dashed border-stone-200 bg-stone-50/60 overflow-hidden">
-          <div class="h-44 bg-gradient-to-br from-orange-50 to-amber-50 flex flex-col items-center justify-center gap-3 p-6">
-            <div class="w-10 h-10 rounded-2xl bg-amber-100 flex items-center justify-center">
-              <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
-            </div>
-            <p class="text-xs text-stone-400 font-light italic text-center leading-snug max-w-[180px]">How the brain shapes the way people navigate interfaces.</p>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="font-medium text-stone-500 text-sm">Neurological Disorders &amp; UX</h3>
-              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-400 border border-stone-200">Upcoming</span>
-            </div>
-            <p class="text-xs text-stone-400 font-light leading-relaxed">How neuroscience insights from Johns Hopkins CTY might inform user-centered design — and how neurological systems shape the way people process and navigate.</p>
-          </div>
-        </div>
-
-        <!-- Right fade buffer so last card isn't clipped -->
-        <div class="flex-shrink-0 w-6"></div>
-
-      </div>
-
-      <!-- Right-edge fade -->
-      <div class="pointer-events-none absolute right-0 top-0 bottom-4 w-16 bg-gradient-to-l from-white to-transparent hidden md:block"></div>
-    </div>
-
-    <!-- Scroll hint + nav arrows -->
-    <div class="flex items-center justify-between mt-5 reveal">
-      <p class="text-xs text-stone-400">1 live &nbsp;·&nbsp; 5 upcoming &nbsp;·&nbsp; Scroll to explore</p>
-      <div class="flex gap-2">
-        <button onclick="document.getElementById('exp-scroll').scrollBy({left:-320,behavior:'smooth'})"
-                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
-        </button>
-        <button onclick="document.getElementById('exp-scroll').scrollBy({left:320,behavior:'smooth'})"
-                class="w-8 h-8 rounded-full border border-stone-200 flex items-center justify-center hover:border-stone-500 hover:bg-stone-900 hover:text-white transition-all">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     ART
-══════════════════════════════════════════════ -->
-<section id="art" class="px-6 md:px-12 bg-stone-50">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="mb-12 reveal">
-      <span class="section-line mb-6"></span>
-      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Art</h2>
-      <p class="text-stone-500 font-light max-w-xl">A selection of work across mediums — acrylic, digital, watercolor, charcoal, ceramics, color pencil, and 3D. Click any piece to view full size.</p>
-    </div>
-
-    <!-- Two rows of 6 — all pieces visible at a glance -->
-    <div class="grid grid-cols-3 md:grid-cols-6 gap-3 reveal">
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Building%20of%20Myself.jpg', 'Building of Myself — Digital Painting')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Building%20of%20Myself.jpg" alt="Building of Myself" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Building of Myself</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Digital Painting</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Contours%20of%20Becoming.jpg', 'Contours of Becoming — 3D Experiment &amp; Color Pencil')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Contours%20of%20Becoming.jpg" alt="Contours of Becoming" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Contours of Becoming</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">3D &amp; Color Pencil</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Exploration%20of%20Patterns.JPG', 'Exploration of Patterns — Ceramics')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Exploration%20of%20Patterns.JPG" alt="Exploration of Patterns" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Exploration of Patterns</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Ceramics</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/living%20in%20the%20music.jpg', 'Living in the Music — Acrylic Painting')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/living%20in%20the%20music.jpg" alt="Living in the Music" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Living in the Music</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Never%20a%20chance.jpeg', 'Never a Chance — Charcoal')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Never%20a%20chance.jpeg" alt="Never a Chance" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Never a Chance</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Charcoal</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Reflections%20of%20the%20Self.jpg', 'Reflections of the Self — Acrylic Painting')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Reflections%20of%20the%20Self.jpg" alt="Reflections of the Self" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Reflections of the Self</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Smile.jpg', 'Smile — Acrylic Painting')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Smile.jpg" alt="Smile" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Smile</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/The%20Clock%20of%20Time.jpg', 'The Clock of Time — Acrylic Painting')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/The%20Clock%20of%20Time.jpg" alt="The Clock of Time" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">The Clock of Time</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Acrylic Painting</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG', 'Visitors to the Empty Canvas — Digital Art')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Visitors%20to%20the%20Empty%20Canvas.JPG" alt="Visitors to the Empty Canvas" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Visitors to the Empty Canvas</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Digital Art</p>
-          </div>
-        </div>
-      </div>
-      <div class="art-item rounded-xl overflow-hidden relative group cursor-zoom-in"
-           onclick="openLightbox('assets/images/Bird.jpg', 'Bird — Watercolor')">
-        <div class="aspect-square bg-stone-100 overflow-hidden">
-          <img src="assets/images/Bird.jpg" alt="Bird" loading="lazy"
-               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.closest('.art-item').style.display='none'"/>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div class="p-3 w-full">
-            <p class="text-white text-xs font-medium leading-tight">Bird</p>
-            <p class="text-white/60 text-xs font-light mt-0.5">Watercolor</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     PERFORMANCE
-══════════════════════════════════════════════ -->
-<section id="performance" class="px-6 md:px-12 bg-stone-50">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="mb-16 reveal">
-      <span class="section-line mb-6"></span>
-      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Performance</h2>
-      <p class="text-stone-500 font-light max-w-xl">Chinese zither (guzheng) and musical theater.</p>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-      <!-- Guzheng -->
-      <div class="reveal">
-        <div class="flex items-start gap-5 mb-6">
-          <div class="w-12 h-12 rounded-2xl bg-stone-900 flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/></svg>
-          </div>
-          <div>
-            <h3 class="font-medium text-stone-900 text-lg mb-1">Chinese Zither — Guzheng</h3>
-            <p class="text-sm text-stone-500 font-light">Classical &amp; Contemporary Repertoire</p>
-          </div>
-        </div>
-        <p class="text-stone-600 font-light leading-relaxed mb-6">The guzheng is a 21-string plucked instrument with over 2,500 years of history. I've studied it for several years, performing both classical Chinese repertoire and contemporary arrangements. The instrument's expressive range — from delicate tremolo to sweeping glissandos — has shaped how I think about pacing, texture, and emotion in all creative work.</p>
-
-        <!-- Guzheng recordings -->
-        <div class="space-y-4">
-          <div class="rounded-2xl overflow-hidden border border-stone-200 bg-stone-100">
-            <div class="aspect-video">
-              <iframe class="w-full h-full" src="https://www.youtube.com/embed/5DSqm-AQ0gk" title="New Song of Dongting Lake" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="px-4 py-3">
-              <p class="text-sm font-medium text-stone-800">New Song of Dongting Lake</p>
-              <p class="text-xs text-stone-400 font-light mt-0.5">Guzheng performance</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <a href="https://youtu.be/YHD-foLPM18" target="_blank"
-               class="p-3 rounded-xl bg-white border border-stone-100 hover:border-stone-300 transition-colors group">
-              <div class="flex items-center gap-2 mb-1">
-                <svg class="w-3.5 h-3.5 text-stone-400 group-hover:text-stone-700 transition-colors flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <p class="text-xs font-medium text-stone-800 leading-tight">Liu Yang River</p>
-              </div>
-              <p class="text-xs text-stone-400 font-light pl-5">Guzheng</p>
-            </a>
-            <a href="https://youtu.be/2Ls4vfqtriY" target="_blank"
-               class="p-3 rounded-xl bg-white border border-stone-100 hover:border-stone-300 transition-colors group">
-              <div class="flex items-center gap-2 mb-1">
-                <svg class="w-3.5 h-3.5 text-stone-400 group-hover:text-stone-700 transition-colors flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <p class="text-xs font-medium text-stone-800 leading-tight">Fisherman's Song at Dusk</p>
-              </div>
-              <p class="text-xs text-stone-400 font-light pl-5">Guzheng</p>
-            </a>
-            <a href="https://youtu.be/pOAtSfd741M" target="_blank"
-               class="p-3 rounded-xl bg-white border border-stone-100 hover:border-stone-300 transition-colors group">
-              <div class="flex items-center gap-2 mb-1">
-                <svg class="w-3.5 h-3.5 text-stone-400 group-hover:text-stone-700 transition-colors flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <p class="text-xs font-medium text-stone-800 leading-tight">Thunder in a Drought</p>
-              </div>
-              <p class="text-xs text-stone-400 font-light pl-5">Guzheng</p>
-            </a>
-            <a href="https://youtu.be/OBucSn8iMww" target="_blank"
-               class="p-3 rounded-xl bg-white border border-stone-100 hover:border-stone-300 transition-colors group">
-              <div class="flex items-center gap-2 mb-1">
-                <svg class="w-3.5 h-3.5 text-stone-400 group-hover:text-stone-700 transition-colors flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <p class="text-xs font-medium text-stone-800 leading-tight">Milking Dance</p>
-              </div>
-              <p class="text-xs text-stone-400 font-light pl-5">Guzheng</p>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Musical Theater -->
-      <div class="reveal reveal-delay-1">
-        <div class="flex items-start gap-5 mb-6">
-          <div class="w-12 h-12 rounded-2xl bg-stone-800 flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-          </div>
-          <div>
-            <h3 class="font-medium text-stone-900 text-lg mb-1">Musical Theater</h3>
-            <p class="text-sm text-stone-500 font-light">School &amp; Summer Productions</p>
-          </div>
-        </div>
-        <p class="text-stone-600 font-light leading-relaxed mb-8">Performed in school and summer theater productions, taking on character roles that required both physical expressiveness and vocal performance. These experiences deepened my appreciation for storytelling, ensemble collaboration, and how an audience's emotional journey is shaped by design as much as performance.</p>
-
-        <!-- Role cards -->
-        <div class="space-y-4">
-          <div class="flex items-start gap-4 p-4 rounded-xl bg-white border border-stone-100 hover:border-stone-200 transition-colors">
-            <span class="text-2xl">🎭</span>
-            <div>
-              <h4 class="font-medium text-stone-900 text-sm">Plankton</h4>
-              <p class="text-xs text-stone-500 font-light mt-0.5">SpongeBob SquarePants — The Musical</p>
-            </div>
-          </div>
-          <div class="flex items-start gap-4 p-4 rounded-xl bg-white border border-stone-100 hover:border-stone-200 transition-colors">
-            <span class="text-2xl">🎭</span>
-            <div>
-              <h4 class="font-medium text-stone-900 text-sm">Hortensia</h4>
-              <p class="text-xs text-stone-500 font-light mt-0.5">Matilda Jr. — The Musical</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     COMMUNITY
-══════════════════════════════════════════════ -->
-<section id="community" class="px-6 md:px-12 bg-white">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="mb-16 reveal">
-      <span class="section-line mb-6"></span>
-      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Community</h2>
-      <p class="text-stone-500 font-light max-w-xl">Leadership, teaching, and building spaces where curiosity is welcome.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-      <!-- True Crime Club -->
-      <div class="reveal p-7 rounded-2xl bg-stone-50 border border-stone-100 hover:border-stone-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-9 h-9 rounded-xl bg-stone-900 flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
-          </div>
-          <span class="tag">Co-President</span>
-        </div>
-        <h3 class="font-medium text-stone-900 text-lg mb-1">True Crime Club</h3>
-        <p class="text-sm text-stone-400 mb-4 font-light">Archbishop Mitty High School</p>
-        <p class="text-sm text-stone-600 font-light leading-relaxed">Revived a previously inactive club and refocused it on the psychology and neuroscience behind criminal behavior. Organized discussions on offender motives, cognitive patterns, and societal impact, encouraging students to analyze real cases critically. Through interactive presentations and collaborative activities, participation grew to approximately 30 students per meeting with around 200 members total.</p>
-        <div class="mt-5 flex gap-4 text-xs text-stone-400 font-medium">
-          <span>~30 / meeting</span>
-          <span class="text-stone-200">|</span>
-          <span>~200 members</span>
-        </div>
-      </div>
-
-      <!-- Calcolor Teaching -->
-      <div class="reveal reveal-delay-1 p-7 rounded-2xl bg-stone-50 border border-stone-100 hover:border-stone-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-9 h-9 rounded-xl bg-stone-700 flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5z"/></svg>
-          </div>
-          <span class="tag">Teaching Assistant</span>
-        </div>
-        <h3 class="font-medium text-stone-900 text-lg mb-1">Calcolor Academy</h3>
-        <p class="text-sm text-stone-400 mb-4 font-light">Art &amp; Design Mentorship</p>
-        <p class="text-sm text-stone-600 font-light leading-relaxed">Mentored younger students in art and design techniques, encouraging creative experimentation and helping them develop visual storytelling skills. Focused on building confidence and curiosity alongside technical ability.</p>
-      </div>
-
-      <!-- Area Youth Ministry -->
-      <div class="reveal p-7 rounded-2xl bg-stone-50 border border-stone-100 hover:border-stone-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-9 h-9 rounded-xl bg-stone-600 flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
-          </div>
-          <span class="tag">Camp Lead</span>
-        </div>
-        <h3 class="font-medium text-stone-900 text-lg mb-1">Area Youth Ministry</h3>
-        <p class="text-sm text-stone-400 mb-4 font-light">Robotics &amp; Team Challenges</p>
-        <p class="text-sm text-stone-600 font-light leading-relaxed">Led a group of campers through team challenges and robotics activities, guiding them in building and programming small robotic cars while fostering teamwork and curiosity. Helped campers navigate the challenge of constraints — a skill equally useful in design and engineering.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     LEARNING
-══════════════════════════════════════════════ -->
-<section id="learning" class="px-6 md:px-12 bg-stone-50">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="mb-16 reveal">
-      <span class="section-line mb-6"></span>
-      <h2 class="display text-4xl md:text-5xl text-stone-900 mb-4">Learning</h2>
-      <p class="text-stone-500 font-light max-w-xl">University pre-college programs and specialized research experiences.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-
-      <!-- Georgetown -->
-      <div class="reveal p-7 rounded-2xl bg-white border border-stone-100 hover:border-stone-200 transition-colors group">
-        <div class="text-2xl mb-4">🏛</div>
-        <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-2">Georgetown University</p>
-        <h3 class="font-medium text-stone-900 mb-1">Anatomy &amp; Physiology</h3>
-        <p class="text-xs text-stone-400 mb-4">Pre-College Program</p>
-        <p class="text-sm text-stone-600 font-light leading-relaxed">Studied the human body from a systems perspective. Created a patient-education pamphlet for diabetic users — focusing on accessibility and clarity in communicating medical information.</p>
-      </div>
-
-      <!-- Brown -->
-      <div class="reveal reveal-delay-1 p-7 rounded-2xl bg-white border border-stone-100 hover:border-stone-200 transition-colors group">
-        <div class="text-2xl mb-4">🔬</div>
-        <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-2">Brown University</p>
-        <h3 class="font-medium text-stone-900 mb-1">Biomedical Engineering</h3>
-        <p class="text-xs text-stone-400 mb-4">Pre-College Program</p>
-        <p class="text-sm text-stone-600 font-light leading-relaxed">Explored device design and tissue engineering through hands-on experiments, learning how engineering constraints shape prototype development — and how those same constraints can sharpen creative thinking.</p>
-      </div>
-
-      <!-- JHU CTY -->
-      <div class="reveal reveal-delay-2 p-7 rounded-2xl bg-white border border-stone-100 hover:border-stone-200 transition-colors group">
-        <div class="text-2xl mb-4">🧠</div>
-        <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-2">Johns Hopkins CTY</p>
-        <h3 class="font-medium text-stone-900 mb-1">Neurological Disorders</h3>
-        <p class="text-xs text-stone-400 mb-4">The Science of Neurological Disorders</p>
-        <p class="text-sm text-stone-600 font-light leading-relaxed">Studying how neurological systems influence cognition and behavior, with growing curiosity about how neuroscience insights might inform user-centered design and how people process information.</p>
-      </div>
-
-    </div>
-
-    <!-- Lab Skills — full width, title inline -->
-    <div class="reveal px-7 py-5 rounded-2xl bg-white border border-stone-100 flex flex-wrap items-center gap-x-6 gap-y-3">
-      <span class="text-xs font-medium tracking-widest text-stone-400 uppercase flex-shrink-0">Lab Skills</span>
-      <div class="flex flex-wrap gap-2">
-        <span class="tag">Gel Electrophoresis</span>
-        <span class="tag">Pipetting</span>
-        <span class="tag">Blood Typing</span>
-        <span class="tag">Tissue Engineering</span>
-        <span class="tag">Device Prototyping</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     ABOUT
-══════════════════════════════════════════════ -->
-<section id="about" class="px-6 md:px-12 bg-white">
-  <div class="max-w-6xl mx-auto">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-
-      <div class="reveal">
-        <span class="section-line mb-6"></span>
-        <h2 class="display text-4xl md:text-5xl text-stone-900 mb-8">About</h2>
-        <div class="space-y-5 text-stone-600 font-light leading-relaxed">
-          <p>I enjoy exploring ideas through art, design, science, and technology. My interests range from visual storytelling and digital illustration to interaction design and biology-inspired experimentation.</p>
-          <p>I'm fascinated by how people experience the world — through stories, music, learning, and creativity — and I enjoy building projects that explore those experiences in new ways.</p>
-          <p>Outside of design and science, I study the guzheng, perform in musical theater, and enjoy experimenting with different artistic mediums including watercolor, ceramics, and digital painting.</p>
-          <p>I'm especially curious about how neuroscience, creative technology, and good design can intersect to build tools that genuinely help people think, feel, and connect.</p>
-        </div>
-        <div class="mt-8 flex flex-wrap gap-2">
-          <span class="tag">Visual Storytelling</span>
-          <span class="tag">Interaction Design</span>
-          <span class="tag">HCI</span>
-          <span class="tag">Product Design</span>
-          <span class="tag">Game Design</span>
-          <span class="tag">AI Tools</span>
-          <span class="tag">Neuroscience</span>
-          <span class="tag">Guzheng</span>
-          <span class="tag">Watercolor</span>
-          <span class="tag">Ceramics</span>
-          <span class="tag">Musical Theater</span>
-        </div>
-      </div>
-
-      <div class="reveal reveal-delay-1 space-y-4">
-        <!-- Exploring -->
-        <div class="p-5 rounded-2xl bg-stone-50 border border-stone-100">
-          <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-3">Exploring</p>
-          <ul class="space-y-1.5 text-xs text-stone-600 font-light">
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-0.5">—</span>Product management, UX, and HCI</li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-0.5">—</span>AI-assisted creativity and interaction design</li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-0.5">—</span>Game design and immersive experience</li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-0.5">—</span>Neuroscience as a lens for UX and empathy</li>
-          </ul>
-        </div>
-        <!-- Awards -->
-        <div class="p-5 rounded-2xl bg-stone-50 border border-stone-100">
-          <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-3">Awards</p>
-          <ul class="space-y-1.5 text-xs text-stone-600 font-light">
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-0.5">—</span><span>Scholastic Silver Key &nbsp;<span class="text-stone-400">2024</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>H.C. Andersen Art Award, Bronze &nbsp;<span class="text-stone-400">2022</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>Stanford Baipu International Competition, Performance Award &nbsp;<span class="text-stone-400">2025</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>Guangdong Guzheng Art Grand Performance, 2nd Place</span></li>
-          </ul>
-        </div>
-        <!-- Leadership & Service -->
-        <div class="p-5 rounded-2xl bg-stone-50 border border-stone-100">
-          <p class="text-xs font-medium tracking-widest text-stone-400 uppercase mb-3">Leadership &amp; Service</p>
-          <ul class="space-y-1.5 text-xs text-stone-600 font-light">
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-0.5">—</span><span>Co-President, Crime Club, Archbishop Mitty &nbsp;<span class="text-stone-400">2024–present</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>Camp Lead, Area Youth Ministry (Robotics) &nbsp;<span class="text-stone-400">2025</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>Teaching Assistant, Calcolor Academy Summer Camps &nbsp;<span class="text-stone-400">2023–2024</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>Guzheng, CA Youth Chinese Symphony – Los Altos Rotary &nbsp;<span class="text-stone-400">Aug 2025</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>Stage Performance, Musical Theater &nbsp;<span class="text-stone-400">2021–2025</span></span></li>
-            <li class="flex items-start gap-2"><span class="text-stone-300 mt-1">—</span><span>Member, Finance Club, Archbishop Mitty &nbsp;<span class="text-stone-400">2024–2025</span></span></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     CONTACT
-══════════════════════════════════════════════ -->
-<section id="contact" class="px-6 md:px-12 bg-stone-900 text-white">
-  <div class="max-w-6xl mx-auto">
-
-    <div class="max-w-2xl reveal">
-      <span class="block w-10 h-px bg-stone-600 mb-8"></span>
-      <h2 class="display text-4xl md:text-5xl text-white mb-6">Get in touch</h2>
-      <p class="text-stone-400 font-light leading-relaxed mb-10 text-lg">I'm always happy to connect — whether it's about design, art, collaboration, or just saying hello.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal reveal-delay-1">
-
-      <div id="email-card" onclick="openEmail()" class="group flex items-center gap-4 p-5 rounded-2xl border border-stone-700 hover:border-stone-500 hover:bg-stone-800 transition-all duration-200 cursor-pointer">
-        <div class="w-10 h-10 rounded-xl bg-stone-700 group-hover:bg-stone-600 flex items-center justify-center flex-shrink-0 transition-colors">
-          <svg class="w-5 h-5 text-stone-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-        </div>
-        <div>
-          <p class="text-xs text-stone-500 uppercase tracking-wider mb-0.5">Email</p>
-          <p id="email-display" class="text-sm text-stone-300 font-light">Send a message</p>
-        </div>
-      </div>
-
-      <a href="https://www.linkedin.com/in/angela-wan-69b12835a/" target="_blank"
-         class="group flex items-center gap-4 p-5 rounded-2xl border border-stone-700 hover:border-stone-500 hover:bg-stone-800 transition-all duration-200">
-        <div class="w-10 h-10 rounded-xl bg-stone-700 group-hover:bg-stone-600 flex items-center justify-center flex-shrink-0 transition-colors">
-          <svg class="w-5 h-5 text-stone-300" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </div>
-        <div>
-          <p class="text-xs text-stone-500 uppercase tracking-wider mb-0.5">LinkedIn</p>
-          <p class="text-sm text-stone-300 font-light">angela-wan</p>
-        </div>
-      </a>
-
-      <a href="https://github.com/angela1-creates/" target="_blank"
-         class="group flex items-center gap-4 p-5 rounded-2xl border border-stone-700 hover:border-stone-500 hover:bg-stone-800 transition-all duration-200">
-        <div class="w-10 h-10 rounded-xl bg-stone-700 group-hover:bg-stone-600 flex items-center justify-center flex-shrink-0 transition-colors">
-          <svg class="w-5 h-5 text-stone-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        </div>
-        <div>
-          <p class="text-xs text-stone-500 uppercase tracking-wider mb-0.5">GitHub</p>
-          <p class="text-sm text-stone-300 font-light">angela1-creates</p>
-        </div>
-      </a>
-
-    </div>
-
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════════ -->
-<footer class="bg-stone-900 border-t border-stone-800 px-6 md:px-12 py-8">
-  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-600">
-    <p class="font-medium">Angela Wan &nbsp;·&nbsp; angela1-creates</p>
-    <p>Designed &amp; built with care &nbsp;·&nbsp; San Jose, CA &nbsp;·&nbsp; 2025</p>
-  </div>
-</footer>
-
-
-<!-- ══════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════ -->
-<script>
-  /* ── Scroll nav ───────────────────────────────────── */
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 20);
-  });
-
-  /* ── Mobile menu ──────────────────────────────────── */
-  const menuBtn  = document.getElementById('menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const iconOpen  = document.getElementById('icon-open');
-  const iconClose = document.getElementById('icon-close');
-  menuBtn.addEventListener('click', () => {
-    const open = mobileMenu.classList.toggle('hidden');
-    iconOpen.classList.toggle('hidden', !open);
-    iconClose.classList.toggle('hidden', open);
-  });
-  function closeMobile() {
-    mobileMenu.classList.add('hidden');
-    iconOpen.classList.remove('hidden');
-    iconClose.classList.add('hidden');
-  }
-
-  /* ── Scroll reveal (progressive enhancement only) ── */
-  // Items are visible by default — JS adds a subtle slide-in for items below fold
-  document.querySelectorAll('.reveal').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-  });
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'none';
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '40px 0px 0px 0px' });
-  setTimeout(() => {
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  }, 50);
-  // Absolute fallback — everything visible after 1.5s
-  setTimeout(() => {
-    document.querySelectorAll('.reveal').forEach(el => {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-    });
-  }, 1500);
-
-  /* Art tabs removed — all pieces shown together */
-  /* ── Email obfuscation ────────────────────────────── */
-  function openEmail() {
-    const u = ['angela', 'wan915'];
-    const d = ['gmail', 'com'];
-    window.location.href = 'mailto:' + u.join('') + '@' + d.join('.');
-  }
-
-  /* ── Lightbox ─────────────────────────────────────── */
-  function openLightbox(src, caption) {
-    const lb = document.getElementById('lightbox');
-    document.getElementById('lightbox-img').src = src;
-    document.getElementById('lightbox-caption').textContent = caption || '';
-    lb.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-</script>
-
-<!-- Lightbox overlay -->
-<div id="lightbox" onclick="closeLightbox()">
-  <button onclick="closeLightbox()" style="position:fixed;top:20px;right:24px;background:none;border:none;color:white;font-size:28px;cursor:pointer;z-index:10000;line-height:1;">×</button>
-  <div style="text-align:center;">
-    <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
-    <p id="lightbox-caption" style="color:rgba(255,255,255,0.5);font-size:.8rem;margin-top:12px;font-family:'DM Sans',sans-serif;font-weight:300;letter-spacing:.05em;"></p>
-  </div>
-</div>
+  </section>
+
+
+  <!-- ================================================================
+       JAVASCRIPT — Navigation + Dot Progress
+       ================================================================
+       Public functions:
+         goTo(sceneId)                  navigate to any scene
+         goToChoice(sceneId, label)     navigate + show discovery badge
+         restart()                      reset all state, return to title
+
+       buildDots() reads data-step / data-total from each .progress
+       element and renders filled/unfilled dot spans on page load.
+
+       TRANSITION_MS must match --t-speed in the CSS above.
+  ================================================================ -->
+  <script>
+    const TRANSITION_MS = 480;
+
+    let activeScene     = document.getElementById('scene-title');
+    let isTransitioning = false;
+
+
+    /* ── Build dot indicators on load ──────────────────────────────
+       Reads data-step and data-total from each .progress block and
+       injects the correct ● / ○ dot spans into .progress-dots.
+    ──────────────────────────────────────────────────────────────── */
+    function buildDots() {
+      document.querySelectorAll('.progress').forEach(function (bar) {
+        var step  = parseInt(bar.dataset.step,  10);
+        var total = parseInt(bar.dataset.total, 10);
+        var container = bar.querySelector('.progress-dots');
+        if (!container) return;
+
+        for (var i = 1; i <= total; i++) {
+          var dot = document.createElement('span');
+          dot.className = 'dot' + (i <= step ? ' filled' : '');
+          dot.setAttribute('aria-hidden', 'true');
+          container.appendChild(dot);
+        }
+      });
+    }
+
+    buildDots();
+
+
+    /* ── Navigate to a scene ────────────────────────────────────── */
+    function goTo(targetId) {
+      if (isTransitioning) return;
+
+      var nextScene = document.getElementById(targetId);
+      if (!nextScene || nextScene === activeScene) return;
+
+      isTransitioning = true;
+      setControls(false);
+
+      activeScene.classList.remove('active');
+      activeScene.classList.add('exit');
+
+      var leavingScene = activeScene;
+
+      setTimeout(function () {
+        leavingScene.classList.remove('exit');
+        nextScene.classList.add('active');
+        activeScene = nextScene;
+        window.scrollTo(0, 0);
+        setControls(true);
+        isTransitioning = false;
+      }, TRANSITION_MS);
+    }
+
+
+    /* ── Navigate to a branch + show discovery badge ────────────── */
+    function goToChoice(targetId, badgeLabel) {
+      goTo(targetId);
+
+      setTimeout(function () {
+        var target = document.getElementById(targetId);
+        var badge  = target && target.querySelector('.discovery-badge');
+        if (badge) {
+          badge.textContent = 'You discovered: ' + badgeLabel;
+          badge.classList.add('visible');
+        }
+      }, TRANSITION_MS + 150);
+    }
+
+
+    /* ── Reset to title ─────────────────────────────────────────── */
+    function restart() {
+      document.querySelectorAll('.discovery-badge').forEach(function (badge) {
+        badge.classList.remove('visible');
+        badge.textContent = '';
+      });
+      goTo('scene-title');
+    }
+
+
+    /* ── Disable / enable all interactive controls ──────────────── */
+    function setControls(enabled) {
+      document.querySelectorAll('.btn-primary, .btn-secondary').forEach(function (btn) {
+        btn.disabled = !enabled;
+      });
+      document.querySelectorAll('.choice-card').forEach(function (card) {
+        card.classList.toggle('disabled', !enabled);
+      });
+    }
+  </script>
 
 </body>
 </html>

@@ -144,11 +144,11 @@
       color: var(--white);
     }
 
-    #scene-title .scene-inner { gap: 1.25rem; }
+    #scene-title .scene-inner { gap: 0.9rem; }
 
     h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.4rem, 8vw, 4.2rem);
+      font-size: clamp(2rem, 7vw, 3.6rem);
       font-weight: 300;
       line-height: 1.05;
       letter-spacing: -0.01em;
@@ -166,6 +166,27 @@
       font-weight: 300;
       line-height: 1.7;
       color: rgba(253, 250, 245, 0.65);
+    }
+
+    .title-context {
+      font-size: 0.82rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(253, 250, 245, 0.45);
+      max-width: 380px;
+      font-style: italic;
+    }
+
+    .title-context-link {
+      color: rgba(253, 250, 245, 0.55);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(184, 150, 106, 0.35);
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .title-context-link:hover {
+      color: var(--gold-light);
+      border-bottom-color: var(--gold-light);
     }
 
     .title-byline {
@@ -606,6 +627,15 @@
 
 <body>
 
+  <!-- Back to portfolio — fixed top-left, unobtrusive -->
+  <a href="../../index.html"
+     style="position:fixed;top:1.1rem;left:1.25rem;z-index:50;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(253,250,245,0.4);text-decoration:none;transition:color 0.2s ease;"
+     onmouseover="this.style.color='rgba(253,250,245,0.85)'"
+     onmouseout="this.style.color='rgba(253,250,245,0.4)'">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+    Portfolio
+  </a>
+
   <!-- ================================================================
        SCENES
        One <section class="scene"> per screen.
@@ -635,8 +665,13 @@
       <p class="title-subtitle">
         What if places could tell their stories when you're standing inside them?
       </p>
+      <p class="title-context">
+        A design prototype by Angela W — taking the
+        <a href="../index.html" class="title-context-link">Historical Place Stories comic</a>
+        one step further, exploring what place-based storytelling could feel like as a short interactive experience.
+      </p>
       <button class="btn-primary" onclick="goTo('scene-intro')">Begin Experience</button>
-      <span class="title-byline">by Angela W</span>
+      <span class="title-byline">by Angela W &nbsp;·&nbsp; companion to the comic</span>
     </div>
     <div class="deco-line" aria-hidden="true"></div>
   </section>

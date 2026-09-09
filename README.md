@@ -53,7 +53,7 @@ The gallery in `index.html` will automatically display them.
 | Section | Description |
 |---|---|
 | Home | Hero with name, tagline, bio |
-| Projects | 6 project cards linking to project pages or GitHub |
+| Projects | 7 project cards linking to project pages or GitHub |
 | Art | Masonry gallery with medium filters + fullscreen lightbox |
 | Experiments | AI design, vibe coding, interaction concepts |
 | Performance | Guzheng + Musical Theater |

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BETA is a route-reading experiment that helps climbers learn to perceive movement without immediately revealing the answer." />
+  <title>BETA — Angela Wan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+    .display { font-family: "DM Serif Display", Georgia, serif; }
+    .eyebrow { letter-spacing: .15em; text-transform: uppercase; }
+    .soft-shadow { box-shadow: 0 26px 70px rgba(23,32,29,.14); }
+    a:focus-visible { outline: 3px solid #356a9a; outline-offset: 4px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body class="min-h-screen bg-[#f4f2ed] text-[#17201d]">
+  <nav class="sticky top-0 z-20 border-b border-[#17201d]/10 bg-[#f4f2ed]/95 px-5 py-4 backdrop-blur md:px-12">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-5">
+      <a href="../index.html#projects" class="flex min-h-11 items-center gap-2 text-sm font-medium text-stone-600 transition-colors hover:text-[#17201d]"><span aria-hidden="true">←</span> Angela Wan</a>
+      <a href="https://angela1-creates.github.io/BETA/" target="_blank" rel="noopener noreferrer" class="flex min-h-11 items-center text-sm font-semibold text-[#315c4d] underline decoration-transparent underline-offset-4 hover:decoration-current">Try BETA <span class="ml-2" aria-hidden="true">↗</span></a>
+    </div>
+  </nav>
+
+  <main>
+    <header class="overflow-hidden px-5 py-16 md:px-12 md:py-24">
+      <div class="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[.9fr_1.05fr] lg:gap-20">
+        <div>
+          <p class="eyebrow mb-5 text-xs font-semibold text-[#52715f]">Product Design · HCI · Learning</p>
+          <h1 class="display mb-5 text-7xl font-normal leading-none text-[#17201d] md:text-8xl">BETA</h1>
+          <p class="display mb-7 max-w-2xl text-3xl leading-tight text-[#315c4d] md:text-4xl">Learn to see the climb.</p>
+          <p class="mb-8 max-w-2xl text-lg font-light leading-relaxed text-stone-600">A route-reading prototype that asks how much guidance helps someone learn without taking away the problem-solving.</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="https://angela1-creates.github.io/BETA/" target="_blank" rel="noopener noreferrer" class="inline-flex min-h-11 items-center justify-center rounded-full bg-[#17201d] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#315c4d]">Try the experience <span class="ml-2" aria-hidden="true">↗</span></a>
+            <a href="https://github.com/angela1-creates/BETA" target="_blank" rel="noopener noreferrer" class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#17201d]/25 bg-white px-6 py-3 text-sm font-semibold text-[#17201d] transition-colors hover:border-[#17201d]">View GitHub <span class="ml-2" aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <figure class="relative mx-auto w-full max-w-xl">
+          <img src="../assets/images/beta-route-wall.png" alt="A modern indoor climbing wall with colorful holds" class="aspect-[4/5] w-full rounded-md object-cover soft-shadow" />
+          <figcaption class="mt-3 text-right text-xs text-stone-500">The route image stays dominant so attention remains on movement.</figcaption>
+        </figure>
+      </div>
+    </header>
+
+    <section class="bg-[#1d2925] px-5 py-16 text-white md:px-12 md:py-24">
+      <div class="mx-auto grid max-w-6xl gap-12 md:grid-cols-[.72fr_1.28fr] md:gap-24">
+        <div><p class="eyebrow mb-4 text-xs font-semibold text-[#aab8b3]">The question</p><h2 class="display text-4xl font-normal leading-tight md:text-5xl">How do climbers learn to read movement, not just holds?</h2></div>
+        <div class="space-y-6 text-base font-light leading-relaxed text-[#d8dfdc] md:text-lg">
+          <p>From the ground, a route can look like a sequence of colored objects. On the wall, it becomes a problem of balance, timing, body position, and choice.</p>
+          <p>BETA creates a small loop around that gap: predict a movement sequence, climb, record the sequence the body actually found, then reflect on what changed.</p>
+          <p class="display border-l-2 border-[#e76f51] pl-5 text-2xl text-white">Hint, don’t solve.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-5 py-16 md:px-12 md:py-24">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-12 grid gap-4 md:grid-cols-[.35fr_1fr] md:gap-12"><p class="eyebrow text-xs font-semibold text-[#52715f]">The learning loop</p><h2 class="display max-w-3xl text-4xl font-normal leading-tight md:text-5xl">Make perception visible before and after the climb.</h2></div>
+        <ol class="grid border-t border-stone-300 md:grid-cols-2">
+          <li class="border-b border-stone-300 py-8 md:pr-10"><span class="text-xs font-semibold text-[#356a9a]">01</span><h3 class="mt-3 text-lg font-semibold">Read</h3><p class="mt-2 font-light leading-relaxed text-stone-600">Choose a sample route or upload a wall photo, then study it without an answer being shown.</p></li>
+          <li class="border-b border-stone-300 py-8 md:border-l md:pl-10"><span class="text-xs font-semibold text-[#356a9a]">02</span><h3 class="mt-3 text-lg font-semibold">Predict</h3><p class="mt-2 font-light leading-relaxed text-stone-600">Place left-hand, right-hand, left-foot, and right-foot markers, add arrows and notes, then order the imagined sequence.</p></li>
+          <li class="border-b border-stone-300 py-8 md:pr-10"><span class="text-xs font-semibold text-[#e76f51]">03</span><h3 class="mt-3 text-lg font-semibold">Climb</h3><p class="mt-2 font-light leading-relaxed text-stone-600">After an attempt, record what actually happened while the body’s solution is still fresh.</p></li>
+          <li class="border-b border-stone-300 py-8 md:border-l md:pl-10"><span class="text-xs font-semibold text-[#e76f51]">04</span><h3 class="mt-3 text-lg font-semibold">Reflect</h3><p class="mt-2 font-light leading-relaxed text-stone-600">Compare both paths with neutral language: what matched, what changed, and what was newly noticed?</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="bg-white px-5 py-16 md:px-12 md:py-24">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-12 grid gap-4 md:grid-cols-[.35fr_1fr] md:gap-12"><p class="eyebrow text-xs font-semibold text-[#e76f51]">Progressive guidance</p><h2 class="display max-w-3xl text-4xl font-normal leading-tight md:text-5xl">Four levels. A deliberate choice at every step.</h2></div>
+        <div class="grid gap-px overflow-hidden rounded-md bg-stone-200 md:grid-cols-4">
+          <article class="bg-[#f7f6f2] p-7"><span class="text-xs text-stone-400">01</span><h3 class="mt-5 font-semibold">Attention</h3><p class="mt-3 text-sm font-light leading-relaxed text-stone-600">Points toward a region or relationship without revealing a move.</p></article>
+          <article class="bg-[#f7f6f2] p-7"><span class="text-xs text-stone-400">02</span><h3 class="mt-5 font-semibold">Principle</h3><p class="mt-3 text-sm font-light leading-relaxed text-stone-600">Offers a movement idea, such as shifting the center of gravity.</p></article>
+          <article class="bg-[#f7f6f2] p-7"><span class="text-xs text-stone-400">03</span><h3 class="mt-5 font-semibold">Movement family</h3><p class="mt-3 text-sm font-light leading-relaxed text-stone-600">Suggests a technique category, such as a flag or hip rotation.</p></article>
+          <article class="bg-[#f1e7e2] p-7"><span class="text-xs text-[#b85843]">04</span><h3 class="mt-5 font-semibold">Explicit beta</h3><p class="mt-3 text-sm font-light leading-relaxed text-stone-600">Requires a deliberate press-and-hold before revealing the full suggestion.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-5 py-16 md:px-12 md:py-24">
+      <div class="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-20">
+        <article><p class="eyebrow mb-4 text-xs font-semibold text-[#52715f]">Design choices</p><h2 class="display mb-6 text-4xl font-normal leading-tight">Support independence, not optimization.</h2><ul class="space-y-4 font-light leading-relaxed text-stone-600"><li>Route photos remain the dominant visual object.</li><li>Predicted and actual paths use distinct, high-contrast visual codes.</li><li>Comparison language avoids wrong, failure, and bad beta.</li><li>Sessions stay on the device through local browser storage.</li><li>No grading, rankings, social feed, streaks, backend, or external AI.</li></ul></article>
+        <article><p class="eyebrow mb-4 text-xs font-semibold text-[#52715f]">What we would test</p><h2 class="display mb-6 text-4xl font-normal leading-tight">Does guidance improve perception?</h2><ul class="grid grid-cols-2 gap-3 text-sm text-stone-600"><li class="border-t border-stone-300 pt-4">Route-reading accuracy</li><li class="border-t border-stone-300 pt-4">Hints requested</li><li class="border-t border-stone-300 pt-4">Route completion</li><li class="border-t border-stone-300 pt-4">Transfer to a new route</li><li class="border-t border-stone-300 pt-4">Confidence</li><li class="border-t border-stone-300 pt-4">Perceived independence</li></ul></article>
+      </div>
+    </section>
+
+    <section class="border-y border-[#17201d]/10 bg-[#e7ebe7] px-5 py-16 text-center md:px-12 md:py-20">
+      <div class="mx-auto max-w-3xl">
+        <p class="eyebrow mb-4 text-xs font-semibold text-[#52715f]">Explore the work</p>
+        <h2 class="display mb-6 text-4xl font-normal md:text-5xl">Keep the problem in your hands.</h2>
+        <p class="mx-auto mb-8 max-w-2xl font-light leading-relaxed text-stone-600">Try the complete route-reading loop or inspect the React and TypeScript implementation.</p>
+        <div class="flex flex-col justify-center gap-3 sm:flex-row">
+          <a href="https://angela1-creates.github.io/BETA/" target="_blank" rel="noopener noreferrer" class="inline-flex min-h-11 items-center justify-center rounded-full bg-[#17201d] px-6 py-3 text-sm font-semibold text-white hover:bg-[#315c4d]">Try the experience <span class="ml-2" aria-hidden="true">↗</span></a>
+          <a href="https://github.com/angela1-creates/BETA" target="_blank" rel="noopener noreferrer" class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#17201d]/25 bg-white px-6 py-3 text-sm font-semibold text-[#17201d] hover:border-[#17201d]">View GitHub <span class="ml-2" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="px-5 py-8 md:px-12">
+    <div class="mx-auto flex max-w-6xl flex-col justify-between gap-3 text-xs text-stone-500 sm:flex-row">
+      <a href="../index.html#projects" class="flex min-h-11 items-center hover:text-[#315c4d]">← Back to portfolio projects</a>
+      <p class="flex min-h-11 items-center">Angela Wan · Product design case study</p>
+    </div>
+  </footer>
+</body>
+</html>

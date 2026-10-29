@@ -31,8 +31,8 @@ angela1-creates.github.io/
     │   ├── index.html                ← project overview page
     │   └── comic/
     │       └── index.html            ← Kai StoryLens comic storyboard
-    └── endometriosis/
-        └── index.html                ← endometriosis awareness project page
+    └── seen/
+        └── index.html                ← Seen product design case study
 ```
 
 ---

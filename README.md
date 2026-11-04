@@ -1,6 +1,6 @@
-# Angela Wan — Portfolio
+# Angela — Portfolio
 
-Personal portfolio site for Angela Wan — designer, artist, and builder from San Jose, CA.
+Personal portfolio site for Angela — designer, artist, and builder from San Jose, CA.
 
 **Live site:** https://angela1-creates.github.io
 
@@ -31,8 +31,8 @@ angela1-creates.github.io/
     │   ├── index.html                ← project overview page
     │   └── comic/
     │       └── index.html            ← Kai StoryLens comic storyboard
-    └── endometriosis/
-        └── index.html                ← endometriosis awareness project page
+    └── seen/
+        └── index.html                ← Seen product design case study
 ```
 
 ---
@@ -76,4 +76,4 @@ GitHub Pages serves `index.html` automatically from the `main` branch root.
 
 ---
 
-*Designed & built by Angela Wan · Class of 2028 · Archbishop Mitty High School*
+*Designed & built by Angela · Class of 2028 · Archbishop Mitty High School*
